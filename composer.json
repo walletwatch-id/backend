@@ -1,8 +1,8 @@
 {
-    "name": "laravel/laravel",
+    "name": "walletwatch/walletwatch-backend",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "The back-end services for the WalletWatch application.",
+    "keywords": ["walletwatch", "backend"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
