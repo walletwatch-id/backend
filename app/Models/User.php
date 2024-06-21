@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasUuids;
+use DateTimeInterface;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -22,7 +23,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'picture',
-        'role',
     ];
 
     /**
@@ -35,6 +35,13 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
+     * The storage format of the model's date columns.
+     *
+     * @var string
+     */
+    protected $dateFormat = DATE_ATOM;
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -45,5 +52,13 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     */
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format(DATE_ATOM);
     }
 }
