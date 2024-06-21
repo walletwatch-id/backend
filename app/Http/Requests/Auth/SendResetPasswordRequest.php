@@ -4,7 +4,7 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ConfirmPasswordRequest extends FormRequest
+class SendResetPasswordRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,7 +14,7 @@ class ConfirmPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'password' => ['required', 'string'],
+            'email' => ['required', 'email'],
         ];
     }
 }
