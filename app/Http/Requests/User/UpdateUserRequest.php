@@ -17,7 +17,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => ['sometimes', 'string'],
             'email' => ['sometimes', 'email', 'unique:users'],
-            'password' => ['sometimes', 'string', 'min:8'],
+            'password' => ['sometimes', 'string', 'min:8', 'confirmed'],
             'picture' => ['sometimes', 'nullable', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'role' => [
                 Rule::when(
