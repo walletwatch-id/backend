@@ -12,7 +12,7 @@ class TransactionPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -20,15 +20,15 @@ class TransactionPolicy
      */
     public function view(User $user, Transaction $transaction): bool
     {
-        //
+        return $user->role === 'ADMIN' || $user->id === $transaction->user_id;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -36,7 +36,7 @@ class TransactionPolicy
      */
     public function update(User $user, Transaction $transaction): bool
     {
-        //
+        return $user->role === 'ADMIN' || $user->id === $transaction->user_id;
     }
 
     /**
@@ -44,22 +44,6 @@ class TransactionPolicy
      */
     public function delete(User $user, Transaction $transaction): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Transaction $transaction): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Transaction $transaction): bool
-    {
-        //
+        return $user->role === 'ADMIN' || $user->id === $transaction->user_id;
     }
 }

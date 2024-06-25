@@ -12,7 +12,7 @@ class ChatSessionPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -20,15 +20,15 @@ class ChatSessionPolicy
      */
     public function view(User $user, ChatSession $chatSession): bool
     {
-        //
+        return $user->role === 'ADMIN' || $user->id === $chatSession->user_id;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -36,7 +36,7 @@ class ChatSessionPolicy
      */
     public function update(User $user, ChatSession $chatSession): bool
     {
-        //
+        return $user->role === 'ADMIN' || $user->id === $chatSession->user_id;
     }
 
     /**
@@ -44,22 +44,6 @@ class ChatSessionPolicy
      */
     public function delete(User $user, ChatSession $chatSession): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, ChatSession $chatSession): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, ChatSession $chatSession): bool
-    {
-        //
+        return $user->role === 'ADMIN' || $user->id === $chatSession->user_id;
     }
 }
