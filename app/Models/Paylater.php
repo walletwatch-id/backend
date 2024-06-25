@@ -6,6 +6,8 @@ use App\Traits\HasUuids;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Paylater extends Model
 {
@@ -34,5 +36,15 @@ class Paylater extends Model
     protected function serializeDate(DateTimeInterface $date): string
     {
         return $date->format(DATE_ATOM);
+    }
+
+    public function hotlines(): HasManyThrough
+    {
+        return $this->hasManyThrough(Hotline::class, PaylaterHotline::class);
+    }
+
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

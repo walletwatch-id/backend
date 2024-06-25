@@ -36,4 +36,9 @@ class ChatMessage extends Model
     {
         return $date->format(DATE_ATOM);
     }
+
+    public function chatSession()
+    {
+        return $this->belongsTo(ChatSession::class);
+    }
 }
