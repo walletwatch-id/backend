@@ -14,7 +14,8 @@ class UpdateInstanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['sometimes', 'string'],
+            'picture' => ['sometimes', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ];
     }
 }

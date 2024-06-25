@@ -14,7 +14,8 @@ class StorePaylaterHotlineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'paylater_id' => ['required', 'uuid', 'exists:paylaters,id'],
+            'hotline_id' => ['required', 'uuid', 'exists:hotlines,id'],
         ];
     }
 }

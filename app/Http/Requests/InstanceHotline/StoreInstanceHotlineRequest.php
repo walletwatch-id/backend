@@ -14,7 +14,8 @@ class StoreInstanceHotlineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'instance_id' => ['required', 'uuid', 'exists:instances,id'],
+            'hotline_id' => ['required', 'uuid', 'exists:hotlines,id'],
         ];
     }
 }

@@ -14,7 +14,9 @@ class UpdateHotlineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['sometimes', 'string'],
+            'type' => ['sometimes', 'string', 'in:EMAIL,PHONE,URL'],
+            'hotline' => ['sometimes', 'string'],
         ];
     }
 }

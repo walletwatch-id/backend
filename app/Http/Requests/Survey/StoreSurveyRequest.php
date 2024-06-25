@@ -14,7 +14,8 @@ class StoreSurveyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => ['required', 'uuid', 'exists:users,id'],
+            'date' => ['required', 'date_format:ATOM'],
         ];
     }
 }

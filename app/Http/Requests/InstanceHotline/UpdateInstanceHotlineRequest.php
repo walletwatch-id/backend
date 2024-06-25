@@ -14,7 +14,8 @@ class UpdateInstanceHotlineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'instance_id' => ['sometimes', 'uuid', 'exists:instances,id'],
+            'hotline_id' => ['sometimes', 'uuid', 'exists:hotlines,id'],
         ];
     }
 }

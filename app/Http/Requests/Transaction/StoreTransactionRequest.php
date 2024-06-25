@@ -14,7 +14,9 @@ class StoreTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => ['required', 'uuid', 'exists:users,id'],
+            'paylater_id' => ['required', 'uuid', 'exists:paylaters,id'],
+            'datetime' => ['required', 'date_format:ATOM'],
         ];
     }
 }

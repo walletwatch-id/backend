@@ -14,7 +14,8 @@ class StorePaylaterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string'],
+            'picture' => ['required', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ];
     }
 }

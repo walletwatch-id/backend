@@ -14,7 +14,8 @@ class UpdatePaylaterHotlineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'paylater_id' => ['sometimes', 'uuid', 'exists:paylaters,id'],
+            'hotline_id' => ['sometimes', 'uuid', 'exists:hotlines,id'],
         ];
     }
 }

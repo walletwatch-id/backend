@@ -14,7 +14,9 @@ class UpdateTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => ['sometimes', 'uuid', 'exists:users,id'],
+            'paylater_id' => ['sometimes', 'uuid', 'exists:paylaters,id'],
+            'datetime' => ['sometimes', 'date_format:ATOM'],
         ];
     }
 }

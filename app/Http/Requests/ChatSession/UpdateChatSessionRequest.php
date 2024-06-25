@@ -14,7 +14,8 @@ class UpdateChatSessionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => ['sometimes', 'uuid', 'exists:users,id'],
+            'title' => ['sometimes', 'nullable', 'string'],
         ];
     }
 }

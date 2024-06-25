@@ -14,7 +14,8 @@ class StoreChatSessionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => ['required', 'uuid', 'exists:users,id'],
+            'title' => ['required', 'nullable', 'string'],
         ];
     }
 }

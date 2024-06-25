@@ -14,7 +14,8 @@ class UpdateSurveyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => ['sometimes', 'uuid', 'exists:users,id'],
+            'date' => ['sometimes', 'date_format:ATOM'],
         ];
     }
 }

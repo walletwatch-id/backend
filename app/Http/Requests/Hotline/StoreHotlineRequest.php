@@ -14,7 +14,9 @@ class StoreHotlineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string'],
+            'type' => ['required', 'string', 'in:EMAIL,PHONE,URL'],
+            'hotline' => ['required', 'string'],
         ];
     }
 }
