@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Jobs\DeleteBlob;
 use App\Models\User;
 use App\Utils\Encoder;
 use App\Utils\ResponseFormatter;
@@ -12,6 +13,7 @@ use App\Utils\Storage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
 use Str;
 
@@ -28,6 +30,11 @@ class UserController extends Controller
     public function index(Request $request): JsonResponse
     {
         $users = QueryBuilder::for(User::class)
+            ->allowedIncludes([
+                'transactions',
+                'surveys',
+                AllowedInclude::relationship('chat_sessions', 'chatSessions'),
+            ])
             ->allowedFilters([
                 'name',
                 'email',
@@ -69,8 +76,15 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user): JsonResponse
+    public function show(Request $request): JsonResponse
     {
+        $user = QueryBuilder::for(User::where('id', $request->user))
+            ->allowedIncludes([
+                'transactions',
+                'surveys',
+                AllowedInclude::relationship('chat_sessions', 'chatSessions'),
+            ])->firstOrFail();
+
         return ResponseFormatter::singleton('user', $user);
     }
 
@@ -84,7 +98,7 @@ class UserController extends Controller
             $id = end($strings);
 
             if (Encoder::isBase64Url($id ?? '')) {
-                // DeleteBlob::dispatch($id);
+                DeleteBlob::dispatch($id);
             }
 
             if ($request->hasFile('picture')) {
@@ -101,9 +115,11 @@ class UserController extends Controller
             : $request->validated()
         );
 
-        if ($request->user()->role === 'ADMIN') {
-            $user->password = $request->password ?? $user->password;
-            $user->role = $request->role ?? $user->role;
+        if ($user->role === 'ADMIN') {
+            $user->forceFill([
+                'password' => $request->password ?? $user->password,
+                'role' => $request->role ?? $user->role,
+            ]);
         }
 
         $user->save();
@@ -120,7 +136,7 @@ class UserController extends Controller
         $id = end($strings);
 
         if (Encoder::isBase64Url($id ?? '')) {
-            // DeleteBlob::dispatch($id);
+            DeleteBlob::dispatch($id);
         }
 
         $user->delete();

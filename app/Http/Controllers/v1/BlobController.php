@@ -35,6 +35,5 @@ class BlobController extends Controller
 
             throw new NotFoundHttpException('Blob not found.');
         }
-
     }
 }
