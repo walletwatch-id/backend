@@ -6,46 +6,86 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ChatMessage\StoreChatMessageRequest;
 use App\Http\Requests\ChatMessage\UpdateChatMessageRequest;
 use App\Models\ChatMessage;
+use App\Models\ChatSession;
+use App\Utils\ResponseFormatter;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedInclude;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ChatMessageController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(ChatMessage::class, 'chat_message');
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request, ChatSession $chatSession): JsonResponse
     {
-        //
+        $chatMessages = QueryBuilder::for(ChatMessage::class)
+            ->allowedIncludes([
+                AllowedInclude::relationship('chat_session', 'chatSession'),
+            ])
+            ->allowedFilters([
+                'sender',
+            ])
+            ->allowedSorts([
+                'sender',
+                'created_at',
+                'updated_at'
+            ])
+            ->where('chat_session_id', $chatSession->id)
+            ->paginate($request->query('per_page', 10));
+
+        return ResponseFormatter::collection('chat_messages', $chatMessages);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreChatMessageRequest $request)
+    public function store(StoreChatMessageRequest $request, ChatSession $chatSession): JsonResponse
     {
-        //
+        $chatMessage = new ChatMessage($request->validated());
+        $chatMessage->fill([
+            'chat_session_id' => $chatSession->id,
+        ]);
+        $chatMessage->save();
+
+        return ResponseFormatter::singleton('chat_message', $chatMessage, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ChatMessage $chatMessage)
+    public function show(Request $request): JsonResponse
     {
-        //
+        $chatMessage = QueryBuilder::for(ChatMessage::where('id', $request->chat_message))
+            ->firstOrFail();
+
+        return ResponseFormatter::singleton('chat_message', $chatMessage);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChatMessageRequest $request, ChatMessage $chatMessage)
+    public function update(UpdateChatMessageRequest $request, ChatMessage $chatMessage): JsonResponse
     {
-        //
+        $chatMessage->fill($request->validated());
+        $chatMessage->save();
+
+        return ResponseFormatter::singleton('chat_message', $chatMessage);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ChatMessage $chatMessage)
+    public function destroy(ChatMessage $chatMessage): JsonResponse
     {
-        //
+        $chatMessage->delete();
+
+        return ResponseFormatter::singleton('chat_message', $chatMessage);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTransactionRequest extends FormRequest
 {
@@ -14,7 +15,13 @@ class StoreTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'uuid', 'exists:users,id'],
+            'user_id' => [
+                Rule::when(
+                    $this->user()->role === 'ADMIN',
+                    ['required', 'uuid', 'exists:users,id'],
+                    ['prohibited'],
+                ),
+            ],
             'paylater_id' => ['required', 'uuid', 'exists:paylaters,id'],
             'datetime' => ['required', 'date_format:ATOM'],
         ];

@@ -46,7 +46,7 @@ class UserController extends Controller
                 'created_at',
                 'updated_at',
             ])
-            ->paginate($request->get('per_page', 10));
+            ->paginate($request->query('per_page', 10));
 
         return ResponseFormatter::collection('users', $users);
     }

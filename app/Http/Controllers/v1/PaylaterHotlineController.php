@@ -3,49 +3,62 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PaylaterHotline\StorePaylaterHotlineRequest;
-use App\Http\Requests\PaylaterHotline\UpdatePaylaterHotlineRequest;
+use App\Http\Requests\Hotline\StoreHotlineRequest;
+use App\Models\Hotline;
+use App\Models\Paylater;
 use App\Models\PaylaterHotline;
+use App\Utils\ResponseFormatter;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PaylaterHotlineController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:view,paylater')->only(['index', 'store']);
+        $this->middleware('can:create'.Hotline::class)->only('store');
+        $this->middleware('can:view,'.Hotline::class)->only('index');
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request, Paylater $paylater): JsonResponse
     {
-        //
+        $paylaterHotlines = PaylaterHotline::select('hotline_id')
+            ->where('paylater_id', $paylater->id)
+            ->get();
+
+        $hotlines = QueryBuilder::for(Hotline::class)
+            ->allowedFilters([
+                'name',
+                'type',
+            ])
+            ->allowedSorts([
+                'name',
+                'type',
+            ])
+            ->whereIn('id', $paylaterHotlines)
+            ->paginate($request->query('per_page', 10));
+
+        return ResponseFormatter::collection('hotlines', $hotlines);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePaylaterHotlineRequest $request)
+    public function store(StoreHotlineRequest $request, Paylater $paylater): JsonResponse
     {
-        //
-    }
+        $hotline = new Hotline($request->validated());
+        $hotline->save();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(PaylaterHotline $paylaterHotline)
-    {
-        //
-    }
+        $paylaterHotline = new PaylaterHotline([
+            'paylater_id' => $paylater->id,
+            'hotline_id' => $hotline->id,
+        ]);
+        $paylaterHotline->save();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePaylaterHotlineRequest $request, PaylaterHotline $paylaterHotline)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PaylaterHotline $paylaterHotline)
-    {
-        //
+        return ResponseFormatter::singleton('hotline', $hotline, 201);
     }
 }

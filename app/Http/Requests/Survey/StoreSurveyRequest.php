@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Survey;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreSurveyRequest extends FormRequest
 {
@@ -14,7 +15,13 @@ class StoreSurveyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'uuid', 'exists:users,id'],
+            'user_id' => [
+                Rule::when(
+                    $this->user()->role === 'ADMIN',
+                    ['required', 'uuid', 'exists:users,id'],
+                    ['prohibited'],
+                ),
+            ],
             'date' => ['required', 'date_format:ATOM'],
         ];
     }

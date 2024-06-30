@@ -14,11 +14,11 @@ class BlobController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(BlobRequest $request, string $id)
+    public function __invoke(BlobRequest $request)
     {
         try {
-            $decoded_id = Encoder::base64UrlDecode($id);
-            $name = $request->query('name') ?? json_decode($decoded_id)->name;
+            $decoded_id = Encoder::base64UrlDecode($request->blob);
+            $name = $request->query('name', json_decode($decoded_id)->name);
             $file_path = Storage::get($decoded_id);
 
             if ($request->boolean('force_download')) {
