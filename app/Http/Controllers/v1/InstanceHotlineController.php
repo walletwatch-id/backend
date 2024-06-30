@@ -17,7 +17,7 @@ class InstanceHotlineController extends Controller
     public function __construct()
     {
         $this->middleware('can:view,instance')->only(['index', 'store']);
-        $this->middleware('can:create'.Hotline::class)->only('store');
+        $this->middleware('can:create,'.Hotline::class)->only('store');
         $this->middleware('can:view,'.Hotline::class)->only('index');
     }
 
