@@ -21,24 +21,26 @@ Route::group(['prefix' => 'api'], function () {
             ]);
         });
 
-        Route::apiResources([
-            'users' => 'App\Http\Controllers\V1\UserController',
-            'paylaters' => 'App\Http\Controllers\V1\PaylaterController',
-            'instances' => 'App\Http\Controllers\V1\InstanceController',
-            'transactions' => 'App\Http\Controllers\V1\TransactionController',
-            'surveys' => 'App\Http\Controllers\V1\SurveyController',
-            'chat-sessions' => 'App\Http\Controllers\V1\ChatSessionController',
-        ]);
-        Route::apiResource('paylaters.hotlines', 'App\Http\Controllers\V1\PaylaterHotlineController')
-            ->only(['index', 'store']);
-        Route::apiResource('instances.hotlines', 'App\Http\Controllers\V1\InstanceHotlineController')
-            ->only(['index', 'store']);
-        Route::apiResource('hotlines', 'App\Http\Controllers\V1\HotlineController')
-            ->only(['show', 'update', 'destroy']);
-        Route::apiResource('chat-sessions.chat-messages', 'App\Http\Controllers\V1\ChatMessageController')
-            ->shallow();
-        Route::get('blobs/{blob}', 'App\Http\Controllers\V1\BlobController')
-            ->name('blobs.show');
+        Route::middleware(['auth:api'])->group(function () {
+            Route::apiResources([
+                'users' => 'App\Http\Controllers\V1\UserController',
+                'paylaters' => 'App\Http\Controllers\V1\PaylaterController',
+                'instances' => 'App\Http\Controllers\V1\InstanceController',
+                'transactions' => 'App\Http\Controllers\V1\TransactionController',
+                'surveys' => 'App\Http\Controllers\V1\SurveyController',
+                'chat-sessions' => 'App\Http\Controllers\V1\ChatSessionController',
+            ]);
+            Route::apiResource('paylaters.hotlines', 'App\Http\Controllers\V1\PaylaterHotlineController')
+                ->only(['index', 'store']);
+            Route::apiResource('instances.hotlines', 'App\Http\Controllers\V1\InstanceHotlineController')
+                ->only(['index', 'store']);
+            Route::apiResource('hotlines', 'App\Http\Controllers\V1\HotlineController')
+                ->only(['show', 'update', 'destroy']);
+            Route::apiResource('chat-sessions.chat-messages', 'App\Http\Controllers\V1\ChatMessageController')
+                ->shallow();
+            Route::get('blobs/{blob}', 'App\Http\Controllers\V1\BlobController')
+                ->name('blobs.show');
+        });
     });
 });
 
