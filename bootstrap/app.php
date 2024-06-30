@@ -42,6 +42,15 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->render(function (AuthenticationException $e) {
+            return JsendFormatter::error(
+                $e->getMessage(),
+                null,
+                null,
+                401,
+            );
+        });
+
         $exceptions->render(function (ValidationException $e) {
             return JsendFormatter::fail(
                 ['details' => $e->errors()],
