@@ -24,13 +24,6 @@ class Paylater extends Model
     ];
 
     /**
-     * The storage format of the model's date columns.
-     *
-     * @var string
-     */
-    protected $dateFormat = DATE_ATOM;
-
-    /**
      * Prepare a date for array / JSON serialization.
      */
     protected function serializeDate(DateTimeInterface $date): string

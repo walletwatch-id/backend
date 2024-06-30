@@ -24,13 +24,6 @@ class Transaction extends Model
     ];
 
     /**
-     * The storage format of the model's date columns.
-     *
-     * @var string
-     */
-    protected $dateFormat = DATE_ATOM;
-
-    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
