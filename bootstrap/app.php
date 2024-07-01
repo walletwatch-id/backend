@@ -1,6 +1,7 @@
 <?php
 
 use App\Utils\JsendFormatter;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
