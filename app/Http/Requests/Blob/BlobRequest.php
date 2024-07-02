@@ -14,8 +14,8 @@ class BlobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'force_download' => 'sometimes|boolean',
-            'name' => 'sometimes|string',
+            'force_download' => ['sometimes', 'boolean'],
+            'name' => ['sometimes', 'string'],
         ];
     }
 

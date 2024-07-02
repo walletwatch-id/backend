@@ -4,6 +4,35 @@ use App\Utils\JsendFormatter;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
+    'as' => 'auth.',
+    'prefix' => 'auth',
+    'namespace' => 'App\Http\Controllers',
+], function () {
+    Route::middleware(['web'])->group(function () {
+        Route::post('register', 'AuthController@register')
+            ->name('register');
+        Route::post('login', 'AuthController@login')
+            ->name('login');
+        Route::post('logout', 'AuthController@logout')
+            ->name('logout');
+        Route::post('confirm-password', 'AuthController@confirmPassword')
+            ->name('password-confirmation');
+        Route::post('reset-password/notify', 'AuthController@sendResetPasswordNotification')
+            ->name('password-reset.notify');
+        Route::post('reset-password', 'AuthController@resetPassword')
+            ->name('password-reset');
+        Route::post('verify-email/notify', 'AuthController@sendEmailVerificationNotification')
+            ->middleware(['auth'])
+            ->name('email-verification.notify');
+        Route::post('verify-email/{id}/{hash}', 'AuthController@verifyEmail')
+            ->middleware(['auth', 'signed'])
+            ->name('email-verification');
+        Route::get('/token', 'AuthController@csrfToken')
+            ->name('csrf-token');
+    });
+});
+
+Route::group([
     'as' => 'passport.',
     'prefix' => 'oauth',
     'namespace' => 'Laravel\Passport\Http\Controllers',

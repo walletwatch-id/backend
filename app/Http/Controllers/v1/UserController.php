@@ -66,8 +66,10 @@ class UserController extends Controller
             ? array_replace($request->validated(), ['picture' => $encoded_id])
             : $request->validated()
         );
-        $user->password = $request->password ?? Str::random(16);
-        $user->role = $request->role ?? 'USER';
+        $user->forceFill([
+            'password' => $request->password,
+            'role' => $request->role ?? 'USER',
+        ]);
         $user->save();
 
         return ResponseFormatter::singleton('user', $user, 201);

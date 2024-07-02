@@ -6,9 +6,13 @@ use App\Http\Requests\Auth\ConfirmPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\Auth\SendResetPasswordRequest;
+use App\Http\Requests\User\RegisterRequest;
 use App\Models\User;
+use App\Utils\Encoder;
 use App\Utils\JsendFormatter;
+use App\Utils\Storage;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,20 +24,69 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     /**
+     * Register a new user.
+     */
+    public function register(RegisterRequest $request): JsonResponse
+    {
+        if ($request->hasFile('picture')) {
+            $id = Storage::store($request->file('picture'), 'avatar');
+            $encoded_id = Encoder::base64UrlEncode($id);
+        }
+
+        $user = new User(
+            $request->hasFile('picture')
+            ? array_replace($request->validated(), ['picture' => $encoded_id])
+            : $request->validated()
+        );
+        $user->forceFill([
+            'password' => $request->password,
+            'role' => 'USER',
+        ]);
+        $user->save();
+
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return JsendFormatter::success(null, 204);
+    }
+
+    /**
      * Login with credentials.
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        $credentials = $request->validated();
+        if (Auth::attempt($request->validated())) {
+            $request->session()->regenerate();
 
-        if (Auth::once($credentials)) {
-            // TODO: Implement token generation and return it in the response.
-
-            return JsendFormatter::success();
+            return JsendFormatter::success(null, 204);
         }
 
         throw ValidationException::withMessages([
             'credentials' => ['Invalid email or password.'],
+        ]);
+    }
+
+    /**
+     * Logout the authenticated user.
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return JsendFormatter::success(null, 204);
+    }
+
+    /**
+     * Get CSRF token.
+     */
+    public function csrfToken(Request $request): JsonResponse
+    {
+        return JsendFormatter::success([
+            'token' => $request->session()->token(),
         ]);
     }
 
@@ -43,7 +96,7 @@ class AuthController extends Controller
     public function confirmPassword(ConfirmPasswordRequest $request): JsonResponse
     {
         if (Hash::check($request->password, $request->user()->password)) {
-            return JsendFormatter::success(null);
+            return JsendFormatter::success(null, 204);
         }
 
         throw ValidationException::withMessages([
@@ -61,7 +114,7 @@ class AuthController extends Controller
         );
 
         if ($status === Password::RESET_LINK_SENT) {
-            return JsendFormatter::success(null);
+            return JsendFormatter::success(null, 204);
         }
 
         throw ValidationException::withMessages([
@@ -88,7 +141,7 @@ class AuthController extends Controller
         );
 
         if ($status === Password::PASSWORD_RESET) {
-            return JsendFormatter::success(null);
+            return JsendFormatter::success(null, 204);
         }
 
         throw ValidationException::withMessages([
@@ -103,7 +156,7 @@ class AuthController extends Controller
     {
         $request->user()->sendEmailVerificationNotification();
 
-        return JsendFormatter::success(null);
+        return JsendFormatter::success(null, 204);
     }
 
     /**
@@ -113,6 +166,6 @@ class AuthController extends Controller
     {
         $request->fulfill();
 
-        return JsendFormatter::success(null);
+        return JsendFormatter::success(null, 204);
     }
 }
