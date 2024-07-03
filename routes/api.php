@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\OAuthController;
 use App\Utils\JsendFormatter;
 use Illuminate\Support\Facades\Route;
 
@@ -39,28 +38,32 @@ Route::group([
 Route::group([
     'as' => 'passport.',
     'prefix' => 'oauth',
-    'namespace' => 'Laravel\Passport\Http\Controllers',
 ], function () {
-    Route::post('/token', 'AccessTokenController@issueToken')
+    Route::post('/token', 'Laravel\Passport\Http\Controllers\AccessTokenController@issueToken')
         ->middleware(['throttle'])
         ->name('token');
 
-    Route::get('/authorize', [OAuthController::class, 'authorize'])
+    Route::get('/_authorize', 'App\Http\Controllers\OAuth\AuthorizationController')
         ->middleware(['web'])
-        ->name('authorizations.authorize');
+        ->name('authorizations._authorize');
 
     $guard = config('passport.guard') ? 'auth:'.config('passport.guard') : 'auth';
 
-    Route::group(['middleware' => ['web', $guard]], function () {
-
+    Route::group([
+        'namespace' => 'Laravel\Passport\Http\Controllers',
+        'middleware' => ['web', $guard],
+    ], function () {
         Route::post('/authorize', 'ApproveAuthorizationController@approve')
             ->name('authorizations.approve');
 
         Route::delete('/authorize', 'DenyAuthorizationController@deny')
             ->name('authorizations.deny');
 
-        Route::post('/token/refresh', 'TransientTokenController@refresh')
-            ->name('token.refresh');
+        Route::get('/tokens', 'AuthorizedAccessTokenController@forUser')
+            ->name('tokens.index');
+
+        Route::delete('/tokens/{token_id}', 'AuthorizedAccessTokenController@destroy')
+            ->name('tokens.destroy');
 
         Route::get('/clients', 'ClientController@forUser')
             ->name('clients.index');
@@ -73,12 +76,6 @@ Route::group([
 
         Route::delete('/clients/{client_id}', 'ClientController@destroy')
             ->name('clients.destroy');
-
-        Route::get('/tokens', 'AuthorizedAccessTokenController@forUser')
-            ->name('tokens.index');
-
-        Route::delete('/tokens/{token_id}', 'AuthorizedAccessTokenController@destroy')
-            ->name('tokens.destroy');
 
         Route::get('/personal-access-tokens', 'PersonalAccessTokenController@forUser')
             ->name('personal-tokens.index');
@@ -114,7 +111,7 @@ Route::group(['prefix' => 'api'], function () {
 
         Route::group([
             'namespace' => 'App\Http\Controllers\Api\V1',
-            'middleware' => ['auth:api']
+            'middleware' => ['auth:api'],
         ], function () {
             Route::apiResources([
                 'users' => 'UserController',
