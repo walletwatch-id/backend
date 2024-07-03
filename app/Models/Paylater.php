@@ -6,8 +6,8 @@ use App\Traits\HasUuids;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Paylater extends Model
 {
@@ -31,9 +31,9 @@ class Paylater extends Model
         return $date->format(DATE_ATOM);
     }
 
-    public function hotlines(): HasManyThrough
+    public function hotlines(): BelongsToMany
     {
-        return $this->hasManyThrough(Hotline::class, PaylaterHotline::class);
+        return $this->belongsToMany(Hotline::class, 'paylater_hotlines');
     }
 
     public function transactions(): HasMany

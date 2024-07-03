@@ -24,6 +24,9 @@ class InstanceController extends Controller
     public function index(Request $request): JsonResponse
     {
         $instances = QueryBuilder::for(Instance::class)
+            ->allowedIncludes([
+                'hotlines',
+            ])
             ->allowedFilters([
                 'name',
             ])

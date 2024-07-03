@@ -24,6 +24,9 @@ class PaylaterController extends Controller
     public function index(Request $request): JsonResponse
     {
         $paylaters = QueryBuilder::for(Paylater::class)
+            ->allowedIncludes([
+                'hotlines',
+            ])
             ->allowedFilters([
                 'name',
             ])
