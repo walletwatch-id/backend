@@ -6,7 +6,7 @@ use App\Http\Requests\Auth\ConfirmPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\Auth\SendResetPasswordRequest;
-use App\Http\Requests\User\RegisterRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use App\Utils\Encoder;
 use App\Utils\JsendFormatter;
