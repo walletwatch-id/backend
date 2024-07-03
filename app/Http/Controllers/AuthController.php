@@ -46,7 +46,7 @@ class AuthController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
+        Auth::guard('web')->login($user);
 
         return JsendFormatter::success(null, 204);
     }
@@ -56,7 +56,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        if (Auth::attempt($request->validated())) {
+        if (Auth::guard('web')->attempt($request->validated())) {
             $request->session()->regenerate();
 
             return JsendFormatter::success(null, 204);
