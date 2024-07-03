@@ -7,29 +7,31 @@ Route::group([
     'as' => 'auth.',
     'prefix' => 'auth',
     'namespace' => 'App\Http\Controllers',
+    'middleware' => ['web'],
 ], function () {
-    Route::middleware(['web'])->group(function () {
-        Route::post('register', 'AuthController@register')
-            ->name('register');
-        Route::post('login', 'AuthController@login')
-            ->name('login');
-        Route::post('logout', 'AuthController@logout')
-            ->name('logout');
-        Route::post('confirm-password', 'AuthController@confirmPassword')
-            ->name('password-confirmation');
-        Route::post('reset-password/notify', 'AuthController@sendResetPasswordNotification')
-            ->name('password-reset.notify');
-        Route::post('reset-password', 'AuthController@resetPassword')
-            ->name('password-reset');
-        Route::post('verify-email/notify', 'AuthController@sendEmailVerificationNotification')
-            ->middleware(['auth'])
-            ->name('email-verification.notify');
-        Route::post('verify-email/{id}/{hash}', 'AuthController@verifyEmail')
-            ->middleware(['auth', 'signed'])
-            ->name('email-verification');
-        Route::get('/token', 'AuthController@csrfToken')
-            ->name('csrf-token');
-    });
+    Route::post('register', 'AuthController@register')
+        ->name('register');
+    Route::post('login', 'AuthController@login')
+        ->name('login');
+    Route::post('logout', 'AuthController@logout')
+        ->name('logout');
+    Route::post('confirm-password', 'AuthController@confirmPassword')
+        ->name('password-confirmation');
+    Route::post('reset-password/notify', 'AuthController@sendResetPasswordNotification')
+        ->name('password-reset.notify');
+    Route::post('reset-password', 'AuthController@resetPassword')
+        ->name('password-reset');
+    Route::post('verify-email/notify', 'AuthController@sendEmailVerificationNotification')
+        ->middleware(['auth:web,api'])
+        ->name('email-verification.notify');
+    Route::post('verify-email/{id}/{hash}', 'AuthController@verifyEmail')
+        ->middleware(['auth:web,api', 'signed'])
+        ->name('verification.verify');
+    Route::get('/user', 'AuthController@user')
+        ->middleware(['auth:web,api'])
+        ->name('user');
+    Route::get('/token', 'AuthController@csrfToken')
+        ->name('csrf-token');
 });
 
 Route::group([
@@ -41,9 +43,9 @@ Route::group([
         ->middleware(['throttle'])
         ->name('token');
 
-    $guard = config('passport.guard', null);
+    $guard = config('passport.guard') ? 'auth:'.config('passport.guard') : 'auth';
 
-    Route::middleware(['web', $guard ? 'auth:'.$guard : 'auth'])->group(function () {
+    Route::group(['middleware' => ['web', $guard]], function () {
         Route::get('/authorize', 'AuthorizationController@authorize')
             ->name('authorizations.authorize');
 
@@ -106,7 +108,7 @@ Route::group(['prefix' => 'api'], function () {
             ]);
         });
 
-        Route::middleware(['auth:api'])->group(function () {
+        Route::group(['middleware' => ['auth:api']], function () {
             Route::apiResources([
                 'users' => 'App\Http\Controllers\V1\UserController',
                 'paylaters' => 'App\Http\Controllers\V1\PaylaterController',
