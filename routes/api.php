@@ -7,31 +7,32 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'as' => 'auth.',
     'prefix' => 'auth',
-    'namespace' => 'App\Http\Controllers',
+    'namespace' => 'App\Http\Controllers\Auth',
     'middleware' => ['web'],
 ], function () {
-    Route::post('register', 'AuthController@register')
+    Route::post('register', 'RegisterController')
         ->name('register');
-    Route::post('login', 'AuthController@login')
+    Route::post('login', 'LoginController')
         ->name('login');
-    Route::post('logout', 'AuthController@logout')
+    Route::post('logout', 'LogoutController')
         ->name('logout');
-    Route::post('confirm-password', 'AuthController@confirmPassword')
+    Route::post('confirm-password', 'ConfirmPasswordController')
+        ->middleware(['auth:web,api'])
         ->name('password-confirmation');
-    Route::post('reset-password/notify', 'AuthController@sendResetPasswordNotification')
+    Route::post('reset-password/notify', 'ResetPasswordController@sendNotification')
         ->name('password-reset.notify');
-    Route::post('reset-password', 'AuthController@resetPassword')
+    Route::post('reset-password', 'ResetPasswordController@reset')
         ->name('password-reset');
-    Route::post('verify-email/notify', 'AuthController@sendEmailVerificationNotification')
+    Route::post('verify-email/notify', 'EmailVerificationController@sendNotification')
         ->middleware(['auth:web,api'])
         ->name('email-verification.notify');
-    Route::post('verify-email/{id}/{hash}', 'AuthController@verifyEmail')
+    Route::post('verify-email/{id}/{hash}', 'EmailVerificationController@verify')
         ->middleware(['auth:web,api', 'signed'])
         ->name('verification.verify');
-    Route::get('/user', 'AuthController@user')
+    Route::get('/user', 'UserController')
         ->middleware(['auth:web,api'])
         ->name('user');
-    Route::get('/token', 'AuthController@csrfToken')
+    Route::get('/token', 'CsrfTokenController')
         ->name('csrf-token');
 });
 
