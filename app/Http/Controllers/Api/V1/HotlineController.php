@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\V1;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Hotline\UpdateHotlineRequest;
 use App\Models\Hotline;
 use App\Utils\ResponseFormatter;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class HotlineController extends Controller

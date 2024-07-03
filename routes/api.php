@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OAuthController;
 use App\Utils\JsendFormatter;
 use Illuminate\Support\Facades\Route;
 
@@ -43,11 +44,13 @@ Route::group([
         ->middleware(['throttle'])
         ->name('token');
 
+    Route::get('/authorize', [OAuthController::class, 'authorize'])
+        ->middleware(['web'])
+        ->name('authorizations.authorize');
+
     $guard = config('passport.guard') ? 'auth:'.config('passport.guard') : 'auth';
 
     Route::group(['middleware' => ['web', $guard]], function () {
-        Route::get('/authorize', 'AuthorizationController@authorize')
-            ->name('authorizations.authorize');
 
         Route::post('/authorize', 'ApproveAuthorizationController@approve')
             ->name('authorizations.approve');
@@ -108,24 +111,27 @@ Route::group(['prefix' => 'api'], function () {
             ]);
         });
 
-        Route::group(['middleware' => ['auth:api']], function () {
+        Route::group([
+            'namespace' => 'App\Http\Controllers\Api\V1',
+            'middleware' => ['auth:api']
+        ], function () {
             Route::apiResources([
-                'users' => 'App\Http\Controllers\V1\UserController',
-                'paylaters' => 'App\Http\Controllers\V1\PaylaterController',
-                'instances' => 'App\Http\Controllers\V1\InstanceController',
-                'transactions' => 'App\Http\Controllers\V1\TransactionController',
-                'surveys' => 'App\Http\Controllers\V1\SurveyController',
-                'chat-sessions' => 'App\Http\Controllers\V1\ChatSessionController',
+                'users' => 'UserController',
+                'paylaters' => 'PaylaterController',
+                'instances' => 'InstanceController',
+                'transactions' => 'TransactionController',
+                'surveys' => 'SurveyController',
+                'chat-sessions' => 'ChatSessionController',
             ]);
-            Route::apiResource('paylaters.hotlines', 'App\Http\Controllers\V1\PaylaterHotlineController')
+            Route::apiResource('paylaters.hotlines', 'PaylaterHotlineController')
                 ->only(['index', 'store']);
-            Route::apiResource('instances.hotlines', 'App\Http\Controllers\V1\InstanceHotlineController')
+            Route::apiResource('instances.hotlines', 'InstanceHotlineController')
                 ->only(['index', 'store']);
-            Route::apiResource('hotlines', 'App\Http\Controllers\V1\HotlineController')
+            Route::apiResource('hotlines', 'HotlineController')
                 ->only(['show', 'update', 'destroy']);
-            Route::apiResource('chat-sessions.chat-messages', 'App\Http\Controllers\V1\ChatMessageController')
+            Route::apiResource('chat-sessions.chat-messages', 'ChatMessageController')
                 ->shallow();
-            Route::get('blobs/{blob}', 'App\Http\Controllers\V1\BlobController')
+            Route::get('blobs/{blob}', 'BlobController')
                 ->name('blobs.show');
         });
     });

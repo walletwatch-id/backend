@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V1;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChatMessage\StoreChatMessageRequest;
@@ -35,7 +35,7 @@ class ChatMessageController extends Controller
             ->allowedSorts([
                 'sender',
                 'created_at',
-                'updated_at'
+                'updated_at',
             ])
             ->where('chat_session_id', $chatSession->id)
             ->paginate($request->query('per_page', 10));

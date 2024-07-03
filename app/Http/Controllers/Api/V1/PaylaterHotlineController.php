@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\V1;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Hotline\StoreHotlineRequest;
 use App\Models\Hotline;
-use App\Models\Instance;
-use App\Models\InstanceHotline;
+use App\Models\Paylater;
+use App\Models\PaylaterHotline;
 use App\Utils\ResponseFormatter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class InstanceHotlineController extends Controller
+class PaylaterHotlineController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('can:view,instance')->only(['index', 'store']);
+        $this->middleware('can:view,paylater')->only(['index', 'store']);
         $this->middleware('can:create,'.Hotline::class)->only('store');
         $this->middleware('can:view,'.Hotline::class)->only('index');
     }
@@ -24,10 +24,10 @@ class InstanceHotlineController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, Instance $instance): JsonResponse
+    public function index(Request $request, Paylater $paylater): JsonResponse
     {
-        $instanceHotlines = InstanceHotline::select('hotline_id')
-            ->where('instance_id', $instance->id)
+        $paylaterHotlines = PaylaterHotline::select('hotline_id')
+            ->where('paylater_id', $paylater->id)
             ->get();
 
         $hotlines = QueryBuilder::for(Hotline::class)
@@ -39,7 +39,7 @@ class InstanceHotlineController extends Controller
                 'name',
                 'type',
             ])
-            ->whereIn('id', $instanceHotlines)
+            ->whereIn('id', $paylaterHotlines)
             ->paginate($request->query('per_page', 10));
 
         return ResponseFormatter::collection('hotlines', $hotlines);
@@ -48,16 +48,16 @@ class InstanceHotlineController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreHotlineRequest $request, Instance $instance): JsonResponse
+    public function store(StoreHotlineRequest $request, Paylater $paylater): JsonResponse
     {
         $hotline = new Hotline($request->validated());
         $hotline->save();
 
-        $instanceHotline = new InstanceHotline([
-            'instance_id' => $instance->id,
+        $paylaterHotline = new PaylaterHotline([
+            'paylater_id' => $paylater->id,
             'hotline_id' => $hotline->id,
         ]);
-        $instanceHotline->save();
+        $paylaterHotline->save();
 
         return ResponseFormatter::singleton('hotline', $hotline, 201);
     }
