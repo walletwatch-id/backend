@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('oauth_refresh_tokens', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('access_token_id')->constrained('oauth_access_tokens')->cascadeOnDelete();
+            $table->string('id', 100)->primary();
+            $table->string('access_token_id', 100)->constrained('oauth_access_tokens')->cascadeOnDelete();
             $table->boolean('revoked');
             $table->dateTime('expires_at')->nullable();
         });

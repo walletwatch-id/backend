@@ -25,9 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Passport::useTokenModel(Token::class);
-        Passport::useRefreshTokenModel(RefreshToken::class);
-        Passport::useAuthCodeModel(AuthCode::class);
         Passport::useClientModel(Client::class);
         Passport::usePersonalAccessClientModel(PersonalAccessClient::class);
         Passport::hashClientSecrets();
