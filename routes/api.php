@@ -27,7 +27,7 @@ Route::group([
         ->name('email-verification.notify');
     Route::post('verify-email/{id}/{hash}', 'EmailVerificationController@verify')
         ->middleware(['auth:web,api', 'signed'])
-        ->name('verification.verify');
+        ->name('email-verification.verify');
     Route::get('/user', 'UserController')
         ->middleware(['auth:web,api'])
         ->name('user');
@@ -46,6 +46,9 @@ Route::group([
     Route::get('/_authorize', 'App\Http\Controllers\OAuth\AuthorizationController')
         ->middleware(['web'])
         ->name('authorizations._authorize');
+
+    Route::get('/authorize', 'App\Http\Controllers\Web\DummyController')
+        ->name('authorizations.authorize');
 
     $guard = config('passport.guard') ? 'auth:'.config('passport.guard') : 'auth';
 
