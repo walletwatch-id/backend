@@ -20,9 +20,9 @@ class HotlineController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request): JsonResponse
+    public function show(Hotline $hotline): JsonResponse
     {
-        $hotline = QueryBuilder::for(Hotline::where('id', $request->hotline))
+        $hotline = QueryBuilder::for(Hotline::where('id', $hotline->id))
             ->firstOrFail();
 
         return ResponseFormatter::singleton('hotline', $hotline);

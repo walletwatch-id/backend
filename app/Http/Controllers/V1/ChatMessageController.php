@@ -60,9 +60,9 @@ class ChatMessageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request): JsonResponse
+    public function show(ChatMessage $chatMessage): JsonResponse
     {
-        $chatMessage = QueryBuilder::for(ChatMessage::where('id', $request->chat_message))
+        $chatMessage = QueryBuilder::for(ChatMessage::where('id', $chatMessage->id))
             ->firstOrFail();
 
         return ResponseFormatter::singleton('chat_message', $chatMessage);

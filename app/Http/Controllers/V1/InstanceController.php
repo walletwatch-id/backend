@@ -49,9 +49,12 @@ class InstanceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request): JsonResponse
+    public function show(Instance $instance): JsonResponse
     {
-        $instance = QueryBuilder::for(Instance::where('id', $request->instance))
+        $instance = QueryBuilder::for(Instance::where('id', $instance->id))
+            ->allowedIncludes([
+                'hotlines',
+            ])
             ->firstOrFail();
 
         return ResponseFormatter::singleton('instance', $instance);

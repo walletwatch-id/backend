@@ -49,9 +49,12 @@ class PaylaterController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request): JsonResponse
+    public function show(Paylater $paylater): JsonResponse
     {
-        $paylater = QueryBuilder::for(Paylater::where('id', $request->paylater))
+        $paylater = QueryBuilder::for(Paylater::where('id', $paylater->id))
+            ->allowedIncludes([
+                'hotlines',
+            ])
             ->firstOrFail();
 
         return ResponseFormatter::singleton('paylater', $paylater);

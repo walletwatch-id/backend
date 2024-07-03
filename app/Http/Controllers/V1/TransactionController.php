@@ -76,9 +76,9 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request): JsonResponse
+    public function show(Transaction $transaction): JsonResponse
     {
-        $transaction = QueryBuilder::for(Transaction::where('id', $request->transaction))
+        $transaction = QueryBuilder::for(Transaction::where('id', $transaction->id))
             ->allowedIncludes([
                 'user',
                 'paylater',

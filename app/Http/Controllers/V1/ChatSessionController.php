@@ -78,9 +78,9 @@ class ChatSessionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request): JsonResponse
+    public function show(ChatSession $chatSession): JsonResponse
     {
-        $chatSession = QueryBuilder::for(ChatSession::where('id', $request->chat_session))
+        $chatSession = QueryBuilder::for(ChatSession::where('id', $chatSession->id))
             ->allowedIncludes([
                 'user',
                 AllowedInclude::relationship('chat_messages', 'chatMessages'),

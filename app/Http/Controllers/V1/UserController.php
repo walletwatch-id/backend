@@ -78,9 +78,9 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request): JsonResponse
+    public function show(User $user): JsonResponse
     {
-        $user = QueryBuilder::for(User::where('id', $request->user))
+        $user = QueryBuilder::for(User::where('id', $user->id))
             ->allowedIncludes([
                 'transactions',
                 'surveys',

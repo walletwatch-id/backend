@@ -67,9 +67,9 @@ class SurveyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request): JsonResponse
+    public function show(Survey $survey): JsonResponse
     {
-        $survey = QueryBuilder::for(Survey::where('id', $request->survey))
+        $survey = QueryBuilder::for(Survey::where('id', $survey->id))
             ->allowedIncludes([
                 'user',
             ])->firstOrFail();
