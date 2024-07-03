@@ -2,11 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\AuthCode;
 use App\Models\Client;
 use App\Models\PersonalAccessClient;
-use App\Models\RefreshToken;
-use App\Models\Token;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
 
