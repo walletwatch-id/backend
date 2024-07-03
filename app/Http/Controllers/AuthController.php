@@ -81,7 +81,18 @@ class AuthController extends Controller
     }
 
     /**
-     * Get CSRF token.
+     * Get the authenticated user.
+     */
+    public function user(Request $request): JsonResponse
+    {
+        return JsendFormatter::success([
+            'user' => $request->user(),
+        ]);
+    }
+
+
+    /**
+     * Get the CSRF token.
      */
     public function csrfToken(Request $request): JsonResponse
     {
