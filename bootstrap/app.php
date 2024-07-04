@@ -7,6 +7,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -61,6 +62,23 @@ return Application::configure(basePath: dirname(__DIR__))
             return JsendFormatter::fail(
                 ['details' => $e->errors()],
                 $e->status ?? 422,
+            );
+        });
+
+        $exceptions->render(function (AccessDeniedHttpException $e) {
+            return JsendFormatter::error(
+                $e->getMessage() ?: 'Forbidden.',
+                $e->getCode() ?: null,
+                config('app.debug') ? [
+                    'exception' => get_class($e),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => collect($e->getTrace())->map(function ($trace) {
+                        return Arr::except($trace, ['args']);
+                    })->all(),
+                ] : null,
+                $e->getStatusCode(),
+                $e->getHeaders() ?: [],
             );
         });
 
