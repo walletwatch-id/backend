@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         apiPrefix: '',
     )
+    ->withBroadcasting(
+        __DIR__.'/../routes/channels.php',
+        ['middleware' => ['web', 'auth:web,api']],
+    )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->use([
             // \Illuminate\Http\Middleware\TrustHosts::class,
