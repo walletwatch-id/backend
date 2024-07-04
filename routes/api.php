@@ -14,6 +14,7 @@ Route::group([
     Route::post('login', 'LoginController')
         ->name('login');
     Route::post('logout', 'LogoutController')
+        ->middleware(['auth:web'])
         ->name('logout');
     Route::post('confirm-password', 'ConfirmPasswordController')
         ->middleware(['auth:web,api'])
