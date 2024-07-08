@@ -30,7 +30,7 @@ Route::group([
         ->middleware(['auth:web,api', 'signed'])
         ->name('email-verification.verify');
     Route::get('/user', 'UserController')
-        ->middleware(['auth:web,api'])
+        ->middleware(['auth:web,api', 'verified'])
         ->name('user');
     Route::get('/token', 'CsrfTokenController')
         ->name('csrf-token');
@@ -115,7 +115,7 @@ Route::group(['prefix' => 'api'], function () {
 
         Route::group([
             'namespace' => 'App\Http\Controllers\Api\V1',
-            'middleware' => ['auth:api'],
+            'middleware' => ['auth:api', 'verified'],
         ], function () {
             Route::apiResources([
                 'users' => 'UserController',
