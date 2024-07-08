@@ -26,14 +26,17 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         VerifyEmail::createUrlUsing(function ($notifiable) {
-            return URL::temporarySignedRoute(
+            $url = parse_url(URL::temporarySignedRoute(
                 'auth.email-verification.verify',
                 Carbon::now()->addMinutes(config('auth.verification.expire', 60)),
                 [
                     'id' => $notifiable->getKey(),
                     'hash' => sha1($notifiable->getEmailForVerification()),
                 ]
-            );
+            ));
+            $paths = explode('/', $url['path']);
+
+            return $url['scheme'].'://'.$url['host'].($url['port'] ? ':'.$url['port'] : null).'/'.$paths[2].'?id='.$paths[3].'&hash='.$paths[4].'&'.$url['query'];
         });
         Passport::useClientModel(Client::class);
         Passport::usePersonalAccessClientModel(PersonalAccessClient::class);
