@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\OAuth;
 
+use App\Traits\HandlesOAuthErrors;
 use App\Utils\JsendFormatter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +17,11 @@ use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Nyholm\Psr7\Response as Psr7Response;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AuthorizationController
 {
+    use HandlesOAuthErrors;
+
     /**
      * The authorization server.
      *
@@ -94,10 +96,9 @@ class AuthorizationController
         $request->session()->put('authRequest', $authRequest);
 
         return JsendFormatter::success([
-            'client' => $client,
             'user' => $user,
+            'client' => $client,
             'scopes' => $scopes,
-            'request' => $request,
             'auth_token' => $authToken,
         ]);
     }
@@ -131,28 +132,6 @@ class AuthorizationController
         $token = $tokens->findValidToken($user, $client);
 
         return $token && $token->scopes === collect($scopes)->pluck('id')->all();
-    }
-
-    /**
-     * Perform the given callback with exception handling.
-     *
-     * @param  \Closure  $callback
-     * @return mixed
-     *
-     * @throws \Laravel\Passport\Exceptions\OAuthServerException
-     */
-    protected function withErrorHandling($callback)
-    {
-        try {
-            return $callback();
-        } catch (OAuthServerException $e) {
-            throw new HttpException(
-                $e->getHttpStatusCode(),
-                $e->getMessage(),
-                $e,
-                $e->getHttpHeaders(),
-            );
-        }
     }
 
     /**
@@ -208,7 +187,11 @@ class AuthorizationController
         $authRequest->setAuthorizationApproved(false);
 
         return $this->withErrorHandling(function () use ($authRequest) {
-            $response = $this->server->completeAuthorizationRequest($authRequest, new Psr7Response);
+            try {
+                $response = $this->server->completeAuthorizationRequest($authRequest, new Psr7Response);
+            } catch (OAuthServerException $e) {
+                $response = $e->generateHttpResponse(new Psr7Response);
+            }
 
             return JsendFormatter::success([
                 'redirect' => $response->getHeaders()['Location'][0],

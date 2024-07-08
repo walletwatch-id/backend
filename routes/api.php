@@ -40,6 +40,8 @@ Route::group([
     'as' => 'passport.',
     'prefix' => 'oauth',
 ], function () {
+    $guard = config('passport.guard') ? 'auth:'.config('passport.guard') : 'auth';
+
     Route::post('/token', 'Laravel\Passport\Http\Controllers\AccessTokenController@issueToken')
         ->middleware(['throttle'])
         ->name('token');
@@ -48,21 +50,21 @@ Route::group([
         ->middleware(['web'])
         ->name('authorizations._authorize');
 
+    Route::post('/_authorize', 'App\Http\Controllers\OAuth\ApproveAuthorizationController')
+        ->middleware(['web', $guard])
+        ->name('authorizations.approve');
+
+    Route::delete('/_authorize', 'App\Http\Controllers\OAuth\DenyAuthorizationController')
+        ->middleware(['web', $guard])
+        ->name('authorizations.deny');
+
     Route::get('/authorize', 'App\Http\Controllers\Web\DummyController')
         ->name('authorizations.authorize');
-
-    $guard = config('passport.guard') ? 'auth:'.config('passport.guard') : 'auth';
 
     Route::group([
         'namespace' => 'Laravel\Passport\Http\Controllers',
         'middleware' => ['web', $guard],
     ], function () {
-        Route::post('/authorize', 'ApproveAuthorizationController@approve')
-            ->name('authorizations.approve');
-
-        Route::delete('/authorize', 'DenyAuthorizationController@deny')
-            ->name('authorizations.deny');
-
         Route::get('/tokens', 'AuthorizedAccessTokenController@forUser')
             ->name('tokens.index');
 
