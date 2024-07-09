@@ -11,6 +11,8 @@ RUN composer install \
     --classmap-authoritative \
     --no-interaction \
     --no-ansi \
+    --no-plugins \
+    --no-scripts \
     --no-dev \
     --prefer-dist
 
