@@ -7,7 +7,8 @@ WORKDIR /tmp
 
 COPY --link composer.json composer.lock ./
 
-RUN composer install \
+RUN --mount=type=cache,target=/root/.composer \
+    composer install \
     --classmap-authoritative \
     --no-interaction \
     --no-ansi \
