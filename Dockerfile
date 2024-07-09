@@ -95,7 +95,7 @@ RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && \
 # Use the default production configuration
 RUN mv ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini
 
-COPY --link --from=vendor /app/vendor ./vendor
+COPY --link --from=vendor /tmp/vendor ./vendor
 COPY --link --chown=${UID}:${GID} . .
 COPY --link --chown=${UID}:${GID} deployment/php.ini ${PHP_INI_DIR}/conf.d/99-octane.ini
 COPY --link --chown=${UID}:${GID} deployment/supervisord.conf /etc/supervisor/
