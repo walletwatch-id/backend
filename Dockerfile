@@ -1,5 +1,5 @@
 # Install PHP dependencies
-FROM composer:2.7.7 as vendor
+FROM composer:2.7.7 AS vendor
 
 ENV COMPOSER_FUND=0
 
@@ -15,7 +15,7 @@ RUN composer install \
     --prefer-dist
 
 # Tool to install PHP extensions
-FROM mlocati/php-extension-installer:2.2.18 as php-ext-installer
+FROM mlocati/php-extension-installer:2.2.18 AS php-ext-installer
 
 # Build production image
 FROM php:8.3.9-cli-alpine
