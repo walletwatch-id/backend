@@ -1,4 +1,4 @@
-# Install PHP dependencies
+# Install dependencies
 FROM composer:2.7.7 AS vendor
 
 ENV COMPOSER_FUND=0
@@ -20,22 +20,8 @@ RUN --mount=type=cache,target=/root/.composer \
 # Tool to install PHP extensions
 FROM mlocati/php-extension-installer:2.2.18 AS php-ext-installer
 
-# Build production image
-FROM php:8.3.9-cli-alpine
-
-ARG UID=1000 \
-    GID=1000 \
-    TZ=UTC
-
-ENV USER=octane \
-    ROOT=/var/www/html \
-    OCTANE_SERVER=swoole \
-    WITH_REVERB=false \
-    WITH_SCHEDULER=false
-
-WORKDIR ${ROOT}
-
-SHELL ["/bin/sh", "-eou", "pipefail", "-c"]
+# Install PHP extensions
+FROM php:8.3.9-cli-alpine AS base
 
 RUN apk add --no-cache \
     curl \
@@ -68,6 +54,23 @@ RUN install-php-extensions \
 RUN docker-php-source delete && \
     rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
+# Build production image
+FROM base AS runner
+
+ARG UID=1000 \
+    GID=1000 \
+    TZ=UTC
+
+ENV USER=octane \
+    ROOT=/var/www/html \
+    OCTANE_SERVER=swoole \
+    WITH_REVERB=false \
+    WITH_SCHEDULER=false
+
+WORKDIR ${ROOT}
+
+SHELL ["/bin/sh", "-eou", "pipefail", "-c"]
+
 RUN arch="$(apk --print-arch)" && \
     case "$arch" in \
     armhf) _cronic_fname="supercronic-linux-arm" ;; \
@@ -82,15 +85,15 @@ RUN arch="$(apk --print-arch)" && \
     mkdir -p /etc/supercronic && \
     echo "*/1 * * * * php ${ROOT}/artisan schedule:run --no-interaction" > /etc/supercronic/laravel
 
+RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && \
+    echo ${TZ} > /etc/timezone
+
 RUN addgroup -S ${USER} -g ${GID} && \
     adduser -S ${USER} -u ${UID} -h ${ROOT} -s /bin/sh
 
 RUN mkdir -p /var/log/supervisor /var/run/supervisor && \
     chown -R ${UID}:${GID} ${ROOT} /var/log /var/run && \
     chmod -R a+rw ${ROOT} /var/log /var/run
-
-RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && \
-    echo ${TZ} > /etc/timezone
 
 # Use the default production configuration
 RUN mv ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini
