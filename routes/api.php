@@ -135,8 +135,8 @@ Route::group(['prefix' => 'api'], function () {
                 ->only(['show', 'update', 'destroy']);
             Route::apiResource('chat-sessions.chat-messages', 'ChatMessageController')
                 ->shallow();
-            Route::get('blobs/{blob}', 'BlobController')
-                ->name('blobs.show');
         });
+
+        Route::get('blobs/{blob}', 'BlobController');
     });
 });
