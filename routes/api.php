@@ -38,7 +38,7 @@ Route::group([
 
 Route::group([
     'as' => 'passport.',
-    'prefix' => 'oauth',
+    'prefix' => 'oauth2',
 ], function () {
     $guard = config('passport.guard') ? 'auth:'.config('passport.guard') : 'auth';
 
