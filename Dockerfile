@@ -39,7 +39,6 @@ RUN install-php-extensions \
     gd \
     igbinary \
     intl \
-    memcached \
     opcache \
     pcntl \
     pdo_pgsql \
