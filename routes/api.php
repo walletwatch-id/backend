@@ -137,6 +137,6 @@ Route::group(['prefix' => 'api'], function () {
                 ->shallow();
         });
 
-        Route::get('blobs/{blob}', 'BlobController');
+        Route::get('blobs/{blob}', 'App\Http\Controllers\Api\V1\BlobController');
     });
 });
