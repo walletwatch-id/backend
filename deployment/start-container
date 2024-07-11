@@ -4,7 +4,7 @@
 
 set -e
 
-container_mode=${CONTAINER_MODE:-"http"}
+container_mode=${CONTAINER_MODE:-"server"}
 run_migrations_and_seeders=${RUN_MIGRATIONS_AND_SEEDERS:-"false"}
 
 echo "Container mode: $container_mode"
