@@ -64,7 +64,10 @@ ENV USER=octane \
     ROOT=/var/www/html \
     OCTANE_SERVER=swoole \
     WITH_REVERB=false \
-    WITH_SCHEDULER=false
+    WITH_SCHEDULER=false \
+    APP_NAME=WalletWatch \
+    APP_ENV=prod \
+    APP_DEBUG=false
 
 WORKDIR ${ROOT}
 
