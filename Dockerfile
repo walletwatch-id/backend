@@ -100,8 +100,18 @@ RUN mkdir -p /var/log/supervisor /var/run/supervisor && \
 # Use the default production configuration
 RUN mv ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini
 
-COPY --link --from=vendor /tmp/vendor ./vendor
+COPY --link --chown=${UID}:${GID} --from=vendor /usr/bin/composer /usr/bin/composer
+COPY --link --chown=${UID}:${GID} --from=vendor /tmp/vendor ./vendor
 COPY --link --chown=${UID}:${GID} . .
+
+RUN composer dump-autoload \
+    --classmap-authoritative \
+    --no-interaction \
+    --no-ansi \
+    --no-plugins \
+    --no-scripts \
+    --no-dev
+
 COPY --link --chown=${UID}:${GID} deployment/php.ini ${PHP_INI_DIR}/conf.d/99-octane.ini
 COPY --link --chown=${UID}:${GID} deployment/supervisord.conf /etc/supervisor/
 COPY --link --chown=${UID}:${GID} deployment/supervisord.*.conf /etc/supervisor/conf.d/
