@@ -100,6 +100,8 @@ RUN mkdir -p /var/log/supervisor /var/run/supervisor && \
 # Use the default production configuration
 RUN mv ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini
 
+USER ${USER}
+
 COPY --link --chown=${UID}:${GID} --from=vendor /usr/bin/composer /usr/bin/composer
 COPY --link --chown=${UID}:${GID} --from=vendor /tmp/vendor ./vendor
 COPY --link --chown=${UID}:${GID} . .
@@ -118,8 +120,6 @@ COPY --link --chown=${UID}:${GID} deployment/supervisord.*.conf /etc/supervisor/
 COPY --link --chown=${UID}:${GID} deployment/start-container /usr/local/bin/start-container
 
 RUN chmod +x /usr/local/bin/start-container
-
-USER ${USER}
 
 EXPOSE 8000 8080
 
