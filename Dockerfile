@@ -112,7 +112,8 @@ RUN composer dump-autoload \
     --no-ansi \
     --no-plugins \
     --no-scripts \
-    --no-dev
+    --no-dev && \
+    rm -rf /usr/bin/composer
 
 COPY --link --chown=${UID}:${GID} deployment/php.ini ${PHP_INI_DIR}/conf.d/99-octane.ini
 COPY --link --chown=${UID}:${GID} deployment/supervisord.conf /etc/supervisor/
