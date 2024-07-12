@@ -105,6 +105,8 @@ Route::group(['prefix' => 'api'], function () {
         ]);
     });
 
+    Route::get('/status', 'App\Http\Controllers\Api\CommonController@checkHealth');
+
     Route::group(['prefix' => 'v1'], function () {
         Route::get('/', function () {
             return JsendFormatter::success([
