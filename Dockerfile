@@ -1,26 +1,7 @@
-# Install dependencies
-FROM composer:2.7.7 AS vendor
-
-ENV COMPOSER_FUND=0
-
-WORKDIR /tmp
-
-COPY --link composer.json composer.lock ./
-
-RUN --mount=type=cache,target=/root/.composer \
-    composer install \
-    --classmap-authoritative \
-    --no-interaction \
-    --no-ansi \
-    --no-plugins \
-    --no-scripts \
-    --no-dev \
-    --prefer-dist
-
-# Tool to install PHP extensions
+# Get tool to install PHP extensions
 FROM mlocati/php-extension-installer:2.2.18 AS php-ext-installer
 
-# Install PHP extensions
+# Install PHP extensions for base image
 FROM php:8.3.9-cli-alpine AS base
 
 RUN apk add --no-cache \
@@ -46,12 +27,33 @@ RUN install-php-extensions \
     pgsql \
     redis \
     sockets \
-    swoole \
-    uv \
     zip
+
+RUN install-php-extensions \
+    swoole \
+    uv
 
 RUN docker-php-source delete && \
     rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+
+# Install dependencies
+FROM composer:2.7.7 AS vendor
+
+ENV COMPOSER_FUND=0
+
+WORKDIR /tmp
+
+COPY --link composer.json composer.lock ./
+
+RUN --mount=type=cache,target=/root/.composer \
+    composer install \
+    --classmap-authoritative \
+    --no-interaction \
+    --no-ansi \
+    --no-plugins \
+    --no-scripts \
+    --no-dev \
+    --prefer-dist
 
 # Build production image
 FROM base AS runner
