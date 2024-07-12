@@ -20,7 +20,10 @@ class Transaction extends Model
     protected $fillable = [
         'user_id',
         'paylater_id',
-        'datetime',
+        'monthly_installment',
+        'period',
+        'first_installment_datetime',
+        'transaction_datetime',
     ];
 
     /**
@@ -31,7 +34,8 @@ class Transaction extends Model
     protected function casts(): array
     {
         return [
-            'datetime' => 'datetime',
+            'first_installment_datetime' => 'datetime',
+            'transaction_datetime' => 'datetime',
         ];
     }
 

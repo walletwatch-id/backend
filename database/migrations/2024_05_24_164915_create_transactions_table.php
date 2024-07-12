@@ -15,7 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('paylater_id')->constrained()->cascadeOnDelete();
-            $table->dateTime('datetime');
+            $table->integer('monthly_installment');
+            $table->integer('period');
+            $table->dateTime('transaction_datetime');
+            $table->dateTime('first_installment_datetime');
             $table->timestamps();
         });
     }

@@ -23,7 +23,10 @@ class UpdateTransactionRequest extends FormRequest
                 ),
             ],
             'paylater_id' => ['sometimes', 'uuid', 'exists:paylaters,id'],
-            'datetime' => ['sometimes', 'date_format:ATOM'],
+            'monthly_installment' => ['sometimes', 'integer', 'min:1'],
+            'period' => ['sometimes', 'integer', 'min:1'],
+            'first_installment_datetime' => ['sometimes', 'date_format:ATOM'],
+            'transaction_datetime' => ['sometimes', 'date_format:ATOM'],
         ];
     }
 }
