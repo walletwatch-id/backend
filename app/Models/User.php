@@ -62,9 +62,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Transaction::class);
     }
 
-    public function surveys(): HasMany
+    public function surveyResults(): HasMany
     {
-        return $this->hasMany(Survey::class);
+        return $this->hasMany(SurveyResult::class);
     }
 
     public function chatSessions(): HasMany

@@ -2,10 +2,10 @@
 
 namespace App\Policies;
 
-use App\Models\Survey;
+use App\Models\SurveyQuestion;
 use App\Models\User;
 
-class SurveyPolicy
+class SurveyQuestionPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -18,9 +18,9 @@ class SurveyPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Survey $survey): bool
+    public function view(User $user, SurveyQuestion $surveyQuestion): bool
     {
-        return $user->role === 'ADMIN' || $survey->is_active;
+        return $user->role === 'ADMIN' || $surveyQuestion->survey->is_active;
     }
 
     /**

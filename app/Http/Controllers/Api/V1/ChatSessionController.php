@@ -27,7 +27,7 @@ class ChatSessionController extends Controller
         $chatSessions = QueryBuilder::for(ChatSession::class)
             ->allowedIncludes([
                 'user',
-                AllowedInclude::relationship('chat_messages', 'chatMessages'),
+                AllowedInclude::relationship('messages', 'chatMessages'),
             ]);
 
         if ($request->user->role === 'ADMIN') {
@@ -83,7 +83,7 @@ class ChatSessionController extends Controller
         $chatSession = QueryBuilder::for(ChatSession::where('id', $chatSession->id))
             ->allowedIncludes([
                 'user',
-                AllowedInclude::relationship('chat_messages', 'chatMessages'),
+                AllowedInclude::relationship('messages', 'chatMessages'),
             ])
             ->firstOrFail();
 

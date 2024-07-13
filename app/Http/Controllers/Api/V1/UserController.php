@@ -84,7 +84,8 @@ class UserController extends Controller
                 'transactions',
                 'surveys',
                 AllowedInclude::relationship('chat_sessions', 'chatSessions'),
-            ])->firstOrFail();
+            ])
+            ->firstOrFail();
 
         return ResponseFormatter::singleton('user', $user);
     }

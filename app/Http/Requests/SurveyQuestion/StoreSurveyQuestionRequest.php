@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Survey;
+namespace App\Http\Requests\SurveyQuestion;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSurveyRequest extends FormRequest
+class StoreSurveyQuestionRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,8 +14,8 @@ class StoreSurveyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'is_active' => ['required', 'boolean'],
+            'question' => ['required', 'string'],
+            'type' => ['required', 'string', 'in:STRING,INTEGER,LIKERT5,LIKERT7'],
         ];
     }
 }

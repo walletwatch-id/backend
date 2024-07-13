@@ -6,9 +6,10 @@ use App\Traits\HasUuids;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Survey extends Model
+class SurveyResult extends Model
 {
     use HasFactory, HasUuids;
 
@@ -18,9 +19,9 @@ class Survey extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'type',
-        'is_active',
+        'user_id',
+        'survey_id',
+        'date',
     ];
 
     /**
@@ -31,7 +32,7 @@ class Survey extends Model
     protected function casts(): array
     {
         return [
-            'is_active' => 'boolean',
+            'date' => 'datetime',
         ];
     }
 
@@ -43,13 +44,18 @@ class Survey extends Model
         return $date->format(DATE_ATOM);
     }
 
-    public function surveyQuestions(): HasMany
+    public function surveyResultAnswers(): HasMany
     {
-        return $this->hasMany(SurveyQuestion::class);
+        return $this->hasMany(SurveyResultAnswer::class);
     }
 
-    public function surveyResults(): HasMany
+    public function user(): BelongsTo
     {
-        return $this->hasMany(SurveyResult::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function survey(): BelongsTo
+    {
+        return $this->belongsTo(Survey::class);
     }
 }

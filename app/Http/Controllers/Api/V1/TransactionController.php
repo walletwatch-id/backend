@@ -82,7 +82,8 @@ class TransactionController extends Controller
             ->allowedIncludes([
                 'user',
                 'paylater',
-            ])->firstOrFail();
+            ])
+            ->firstOrFail();
 
         return ResponseFormatter::singleton('transaction', $transaction);
     }

@@ -126,7 +126,8 @@ Route::group(['prefix' => 'api'], function () {
                 'paylaters' => 'PaylaterController',
                 'instances' => 'InstanceController',
                 'transactions' => 'TransactionController',
-                'surveys' => 'SurveyController',
+                'financial-surveys' => 'FinancialSurveyController',
+                'personality-surveys' => 'PersonalitySurveyController',
                 'chat-sessions' => 'ChatSessionController',
             ]);
             Route::apiResource('paylaters.hotlines', 'PaylaterHotlineController')
@@ -134,6 +135,12 @@ Route::group(['prefix' => 'api'], function () {
             Route::apiResource('instances.hotlines', 'InstanceHotlineController')
                 ->only(['index', 'store']);
             Route::apiResource('hotlines', 'HotlineController')
+                ->only(['show', 'update', 'destroy']);
+            Route::apiResource('financial-surveys.survey-questions', 'SurveyQuestionController')
+                ->only(['index', 'store']);
+            Route::apiResource('personality-surveys.survey-questions', 'SurveyQuestionController')
+                ->only(['index', 'store']);
+            Route::apiResource('survey-questions', 'SurveyQuestionController')
                 ->only(['show', 'update', 'destroy']);
             Route::apiResource('chat-sessions.chat-messages', 'ChatMessageController')
                 ->shallow();
