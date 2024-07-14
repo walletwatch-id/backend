@@ -142,6 +142,14 @@ Route::group(['prefix' => 'api'], function () {
                 ->only(['index', 'store']);
             Route::apiResource('survey-questions', 'SurveyQuestionController')
                 ->only(['show', 'update', 'destroy']);
+            Route::apiResource('financial-surveys.survey-results', 'SurveyResultController')
+                ->only(['index', 'store']);
+            Route::apiResource('personality-surveys.survey-results', 'SurveyResultController')
+                ->only(['index', 'store']);
+            Route::apiResource('survey-results', 'SurveyResultController')
+                ->only(['show', 'update', 'destroy']);
+            Route::apiResource('survey-results.survey-result-answers', 'SurveyResultAnswerController')
+                ->shallow();
             Route::apiResource('chat-sessions.chat-messages', 'ChatMessageController')
                 ->shallow();
         });
