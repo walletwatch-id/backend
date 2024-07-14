@@ -24,6 +24,10 @@ class CommonController extends Controller
                 'message' => 'Response successfully rendered in '.$latency.'ms',
                 'latency' => $latency,
             ]);
+        } else {
+            return JsendFormatter::success([
+                'message' => 'Server is up and running.',
+            ]);
         }
     }
 }
