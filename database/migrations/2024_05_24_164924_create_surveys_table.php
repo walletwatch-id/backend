@@ -37,8 +37,8 @@ return new class extends Migration
 
         Schema::create('survey_result_answers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('result_id')->constrained()->cascadeOnDelete();
-            $table->foreignUuid('question_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('result_id')->constrained('survey_results')->cascadeOnDelete();
+            $table->foreignUuid('question_id')->constrained('survey_questions')->cascadeOnDelete();
             $table->string('answer');
             $table->timestamps();
         });
