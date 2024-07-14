@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('chat_sessions', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('external_id')->nullable();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->timestamps();
@@ -20,7 +21,8 @@ return new class extends Migration
 
         Schema::create('chat_messages', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('chat_session_id')->constrained()->cascadeOnDelete();
+            $table->string('external_id')->nullable();
+            $table->foreignUuid('session_id')->constrained('chat_sessions')->cascadeOnDelete();
             $table->enum('sender', ['USER', 'BOT']);
             $table->text('message');
             $table->timestamps();
