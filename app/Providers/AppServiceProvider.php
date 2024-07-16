@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\Client;
 use App\Models\PersonalAccessClient;
+use App\Repositories\StorageFacade;
+use App\Repositories\StorageFacadeImpl;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
@@ -12,6 +14,15 @@ use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * All of the container singletons that should be registered.
+     *
+     * @var array
+     */
+    public $singletons = [
+        StorageFacade::class => StorageFacadeImpl::class,
+    ];
+
     /**
      * Register any application services.
      */

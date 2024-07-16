@@ -1,49 +1,55 @@
 <?php
 
-namespace App\Utils;
+namespace App\Repositories;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage as StorageFacade;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Uid\Uuid;
 
-class Storage
+class StorageFacadeImpl implements StorageFacade
 {
     public static function store(
         UploadedFile $file,
         string $path,
         ?string $name = null,
         string $disk = 'local',
-    ) {
+    ): string {
         if (is_null($name)) {
             $name = Uuid::v7().'.'.$file->extension();
         }
 
         $file->storeAs($path, $name, $disk);
 
-        return json_encode([
+        $manifest = json_encode([
             'disk' => $disk,
             'path' => $path,
             'name' => $name,
         ]);
+
+        if (! $manifest) {
+            throw new \Exception('Failed to store file');
+        } else {
+            return $manifest;
+        }
     }
 
-    public static function get(string $id)
+    public static function get(string $manifest): string
     {
-        $params = json_decode($id);
+        $params = json_decode($manifest);
         $disk = $params->disk;
         $path = $params->path;
         $name = $params->name;
 
-        return StorageFacade::disk($disk)->path($path.'/'.$name);
+        return Storage::disk($disk)->path($path.'/'.$name);
     }
 
-    public static function delete(string $id)
+    public static function delete(string $manifest): bool
     {
-        $params = json_decode($id);
+        $params = json_decode($manifest);
         $disk = $params->disk;
         $path = $params->path;
         $name = $params->name;
 
-        return StorageFacade::disk($disk)->delete($path.'/'.$name);
+        return Storage::disk($disk)->delete($path.'/'.$name);
     }
 }
