@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Uid\Uuid;
 
 class StorageFacadeImpl implements StorageFacade
@@ -40,7 +41,11 @@ class StorageFacadeImpl implements StorageFacade
         $path = $params->path;
         $name = $params->name;
 
-        return Storage::disk($disk)->path($path.'/'.$name);
+        if (! Storage::disk($disk)->exists($path.'/'.$name)) {
+            throw new NotFoundHttpException('File not found.');
+        } else {
+            return Storage::disk($disk)->path($path.'/'.$name);
+        }
     }
 
     public static function delete(string $manifest): bool
