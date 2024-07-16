@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Instance\StoreInstanceRequest;
 use App\Http\Requests\Instance\UpdateInstanceRequest;
+use App\Jobs\DeleteBlob;
 use App\Models\Instance;
+use App\Repositories\StorageFacade;
+use App\Utils\Encoder;
 use App\Utils\ResponseFormatter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,8 +16,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class InstanceController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(
+        protected StorageFacade $storageFacade,
+    ) {
         $this->authorizeResource(Instance::class, 'instance');
     }
 
@@ -43,7 +47,16 @@ class InstanceController extends Controller
      */
     public function store(StoreInstanceRequest $request): JsonResponse
     {
-        $instance = new Instance($request->validated());
+        if ($request->hasFile('logo')) {
+            $manifest = $this->storageFacade->store($request->file('logo'), 'logo/instances');
+            $encodedManifest = Encoder::base64UrlEncode($manifest);
+        }
+
+        $instance = new Instance(
+            $request->hasFile('logo')
+            ? array_replace($request->validated(), ['logo' => $encodedManifest])
+            : $request->validated()
+        );
         $instance->save();
 
         return ResponseFormatter::singleton('instance', $instance, 201);
@@ -68,7 +81,27 @@ class InstanceController extends Controller
      */
     public function update(UpdateInstanceRequest $request, Instance $instance): JsonResponse
     {
-        $instance->fill($request->validated());
+        if ($request->has('logo')) {
+            $strings = explode('/', $instance->logo);
+            $encodedManifest = end($strings);
+
+            if (Encoder::isBase64Url($encodedManifest ?? '')) {
+                DeleteBlob::dispatch($encodedManifest);
+            }
+
+            if ($request->hasFile('logo')) {
+                $manifest = $this->storageFacade->store($request->file('logo'), 'logo/instances');
+                $encodedManifest = Encoder::base64UrlEncode($manifest);
+            } else {
+                $encodedManifest = null;
+            }
+        }
+
+        $instance->fill(
+            $request->has('logo')
+            ? array_replace($request->validated(), ['logo' => $encodedManifest])
+            : $request->validated()
+        );
         $instance->save();
 
         return ResponseFormatter::singleton('instance', $instance);
@@ -79,6 +112,13 @@ class InstanceController extends Controller
      */
     public function destroy(Instance $instance): JsonResponse
     {
+        $strings = explode('/', $instance->logo);
+        $encodedManifest = end($strings);
+
+        if (Encoder::isBase64Url($encodedManifest ?? '')) {
+            dispatch(new DeleteBlob($encodedManifest));
+        }
+
         $instance->delete();
 
         return ResponseFormatter::singleton('instance', $instance);

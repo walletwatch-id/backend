@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Paylater\StorePaylaterRequest;
 use App\Http\Requests\Paylater\UpdatePaylaterRequest;
+use App\Jobs\DeleteBlob;
 use App\Models\Paylater;
+use App\Repositories\StorageFacade;
+use App\Utils\Encoder;
 use App\Utils\ResponseFormatter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,8 +16,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class PaylaterController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(
+        protected StorageFacade $storageFacade,
+    ) {
         $this->authorizeResource(Paylater::class, 'paylater');
     }
 
@@ -43,7 +47,16 @@ class PaylaterController extends Controller
      */
     public function store(StorePaylaterRequest $request): JsonResponse
     {
-        $paylater = new Paylater($request->validated());
+        if ($request->hasFile('logo')) {
+            $manifest = $this->storageFacade->store($request->file('logo'), 'logo/paylaters');
+            $encodedManifest = Encoder::base64UrlEncode($manifest);
+        }
+
+        $paylater = new Paylater(
+            $request->hasFile('logo')
+            ? array_replace($request->validated(), ['logo' => $encodedManifest])
+            : $request->validated()
+        );
         $paylater->save();
 
         return ResponseFormatter::singleton('paylater', $paylater, 201);
@@ -68,7 +81,27 @@ class PaylaterController extends Controller
      */
     public function update(UpdatePaylaterRequest $request, Paylater $paylater): JsonResponse
     {
-        $paylater->fill($request->validated());
+        if ($request->has('logo')) {
+            $strings = explode('/', $paylater->logo);
+            $encodedManifest = end($strings);
+
+            if (Encoder::isBase64Url($encodedManifest ?? '')) {
+                DeleteBlob::dispatch($encodedManifest);
+            }
+
+            if ($request->hasFile('logo')) {
+                $manifest = $this->storageFacade->store($request->file('logo'), 'logo/paylaters');
+                $encodedManifest = Encoder::base64UrlEncode($manifest);
+            } else {
+                $encodedManifest = null;
+            }
+        }
+
+        $paylater->fill(
+            $request->has('logo')
+            ? array_replace($request->validated(), ['logo' => $encodedManifest])
+            : $request->validated()
+        );
         $paylater->save();
 
         return ResponseFormatter::singleton('paylater', $paylater);
@@ -79,6 +112,13 @@ class PaylaterController extends Controller
      */
     public function destroy(Paylater $paylater): JsonResponse
     {
+        $strings = explode('/', $paylater->logo);
+        $encodedManifest = end($strings);
+
+        if (Encoder::isBase64Url($encodedManifest ?? '')) {
+            dispatch(new DeleteBlob($encodedManifest));
+        }
+
         $paylater->delete();
 
         return ResponseFormatter::singleton('paylater', $paylater);

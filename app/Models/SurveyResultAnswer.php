@@ -40,5 +40,4 @@ class SurveyResultAnswer extends Model
     {
         return $this->belongsTo(SurveyQuestion::class);
     }
-
 }

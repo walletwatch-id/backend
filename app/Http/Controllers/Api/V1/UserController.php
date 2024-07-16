@@ -21,8 +21,7 @@ class UserController extends Controller
 {
     public function __construct(
         protected StorageFacade $storageFacade,
-    )
-    {
+    ) {
         $this->authorizeResource(User::class, 'user');
     }
 
@@ -138,10 +137,10 @@ class UserController extends Controller
     public function destroy(User $user): JsonResponse
     {
         $strings = explode('/', $user->picture);
-        $id = end($strings);
+        $encodedManifest = end($strings);
 
-        if (Encoder::isBase64Url($id ?? '')) {
-            DeleteBlob::dispatch($id);
+        if (Encoder::isBase64Url($encodedManifest ?? '')) {
+            DeleteBlob::dispatch($encodedManifest);
         }
 
         $user->delete();
