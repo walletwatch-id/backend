@@ -15,7 +15,7 @@ class StoreInstanceRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'picture' => ['required', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'logo' => ['required', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ];
     }
 }

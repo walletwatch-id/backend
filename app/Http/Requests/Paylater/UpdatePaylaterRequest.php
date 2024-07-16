@@ -15,7 +15,7 @@ class UpdatePaylaterRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'string'],
-            'picture' => ['sometimes', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'logo' => ['sometimes', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ];
     }
 }
