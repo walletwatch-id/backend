@@ -7,6 +7,7 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\DeleteBlob;
 use App\Models\User;
+use App\Repositories\StorageFacade;
 use App\Utils\Encoder;
 use App\Utils\ResponseFormatter;
 use App\Utils\Storage;
@@ -18,7 +19,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
-    public function __construct()
+    public function __construct(
+        protected StorageFacade $storageFacade,
+    )
     {
         $this->authorizeResource(User::class, 'user');
     }
@@ -56,13 +59,13 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): JsonResponse
     {
         if ($request->hasFile('picture')) {
-            $id = Storage::store($request->file('picture'), 'avatar');
-            $encoded_id = Encoder::base64UrlEncode($id);
+            $manifest = $this->storageFacade->store($request->file('picture'), 'avatar');
+            $encodedManifest = Encoder::base64UrlEncode($manifest);
         }
 
         $user = new User(
             $request->hasFile('picture')
-            ? array_replace($request->validated(), ['picture' => $encoded_id])
+            ? array_replace($request->validated(), ['picture' => $encodedManifest])
             : $request->validated()
         );
         $user->forceFill([
@@ -97,23 +100,23 @@ class UserController extends Controller
     {
         if ($request->has('picture')) {
             $strings = explode('/', $user->picture);
-            $id = end($strings);
+            $encodedManifest = end($strings);
 
-            if (Encoder::isBase64Url($id ?? '')) {
-                DeleteBlob::dispatch($id);
+            if (Encoder::isBase64Url($encodedManifest ?? '')) {
+                DeleteBlob::dispatch($encodedManifest);
             }
 
             if ($request->hasFile('picture')) {
-                $id = Storage::store($request->file('picture'), 'avatar');
-                $encoded_id = Encoder::base64UrlEncode($id);
+                $manifest = $this->storageFacade->store($request->file('picture'), 'avatar');
+                $encodedManifest = Encoder::base64UrlEncode($manifest);
             } else {
-                $encoded_id = null;
+                $encodedManifest = null;
             }
         }
 
         $user->fill(
             $request->has('picture')
-            ? array_replace($request->validated(), ['picture' => $encoded_id])
+            ? array_replace($request->validated(), ['picture' => $encodedManifest])
             : $request->validated()
         );
 

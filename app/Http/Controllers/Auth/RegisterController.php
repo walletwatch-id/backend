@@ -5,28 +5,32 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
+use App\Repositories\StorageFacade;
 use App\Utils\Encoder;
 use App\Utils\JsendFormatter;
-use App\Utils\Storage;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
+    public function __construct(
+        protected StorageFacade $storageFacade,
+    ) {}
+
     /**
      * Register a new user.
      */
     public function __invoke(RegisterRequest $request): JsonResponse
     {
         if ($request->hasFile('picture')) {
-            $id = Storage::store($request->file('picture'), 'avatar');
-            $encoded_id = Encoder::base64UrlEncode($id);
+            $id = $this->storageFacade->store($request->file('picture'), 'avatar');
+            $encodedManifest = Encoder::base64UrlEncode($id);
         }
 
         $user = new User(
             $request->hasFile('picture')
-            ? array_replace($request->validated(), ['picture' => $encoded_id])
+            ? array_replace($request->validated(), ['picture' => $encodedManifest])
             : $request->validated()
         );
         $user->forceFill([
