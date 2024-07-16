@@ -101,7 +101,7 @@ class UserController extends Controller
             $encodedManifest = end($strings);
 
             if (Encoder::isBase64Url($encodedManifest ?? '')) {
-                DeleteBlob::dispatch($encodedManifest);
+                dispatch(new DeleteBlob($encodedManifest));
             }
 
             if ($request->hasFile('picture')) {
@@ -139,7 +139,7 @@ class UserController extends Controller
         $encodedManifest = end($strings);
 
         if (Encoder::isBase64Url($encodedManifest ?? '')) {
-            DeleteBlob::dispatch($encodedManifest);
+            dispatch(new DeleteBlob($encodedManifest));
         }
 
         $user->delete();

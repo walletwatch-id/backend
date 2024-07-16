@@ -86,7 +86,7 @@ class PaylaterController extends Controller
             $encodedManifest = end($strings);
 
             if (Encoder::isBase64Url($encodedManifest ?? '')) {
-                DeleteBlob::dispatch($encodedManifest);
+                dispatch(new DeleteBlob($encodedManifest));
             }
 
             if ($request->hasFile('logo')) {

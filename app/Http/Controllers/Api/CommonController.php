@@ -15,7 +15,7 @@ class CommonController extends Controller
      */
     public function checkHealth(): JsonResponse
     {
-        Event::dispatch(new DiagnosingHealth);
+        event(new DiagnosingHealth);
 
         if (defined('LARAVEL_START')) {
             $latency = round((microtime(true) - LARAVEL_START) * 1000);
