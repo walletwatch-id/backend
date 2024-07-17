@@ -6,6 +6,8 @@ use App\Models\Client;
 use App\Models\PersonalAccessClient;
 use App\Repositories\StorageFacade;
 use App\Repositories\StorageFacadeImpl;
+use App\Repositories\TransactionRepository;
+use App\Repositories\TransactionRepositoryImpl;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public $singletons = [
         StorageFacade::class => StorageFacadeImpl::class,
+        TransactionRepository::class => TransactionRepositoryImpl::class,
     ];
 
     /**
