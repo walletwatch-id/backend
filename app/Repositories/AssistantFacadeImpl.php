@@ -82,14 +82,14 @@ class AssistantFacadeImpl implements AssistantFacade
             case 'get_installments':
                 $date = Carbon::parse($arguments?->month) ?? Carbon::now();
 
-                return $this->transactionRepository->getInstallmentsOnMonth($userId, $date);
+                return strval($this->transactionRepository->getInstallmentsOnMonth($userId, $date));
             case 'get_transactions':
                 $startDate = Carbon::parse($arguments?->start_date) ?? Carbon::now()->startOfMonth();
                 $endDate = Carbon::parse($arguments?->end_date) ?? Carbon::now()->endOfMonth();
 
-                return $this->transactionRepository->getTransactionsOnRange($userId, $startDate, $endDate);
+                return strval($this->transactionRepository->getTransactionsOnRange($userId, $startDate, $endDate));
             default:
-                return null;
+                return '';
         }
     }
 
@@ -122,7 +122,7 @@ class AssistantFacadeImpl implements AssistantFacade
         return [$messageId, $summary];
     }
 
-    private function handleThreadRunResponseRequiredAction(ThreadRunResponse $response, bool $streamed, string $userId): ThreadRunResponse
+    private function handleThreadRunResponseRequiredAction(ThreadRunResponse $response, bool $streamed, string $userId): ThreadRunResponse|StreamResponse
     {
         $toolCalls = $response->requiredAction->submitToolOutputs->toolCalls;
         $toolOutputs = [];
@@ -192,7 +192,7 @@ class AssistantFacadeImpl implements AssistantFacade
                         if ($run->requiredAction->type === 'submit_tool_outputs') {
                             if ($this->isDebug) {
                                 Log::info('Assistant requires action to submit tool outputs.', [
-                                    'tool_calls' => $run->requiredAction->submitToolOutputs->toolCalls,
+                                    'tool_calls' => $run->requiredAction->submitToolOutputs->toolCalls->toArray(),
                                 ]);
                             }
 
