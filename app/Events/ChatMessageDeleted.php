@@ -9,7 +9,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ChatMessageCreated implements ShouldBroadcast
+class ChatMessageDeleted implements ShouldBroadcast
 {
     use Dispatchable, SerializesModels;
 
@@ -31,18 +31,10 @@ class ChatMessageCreated implements ShouldBroadcast
     }
 
     /**
-     * Determine if this event should broadcast.
-     */
-    public function broadcastWhen(): bool
-    {
-        return $this->chatMessage->sender === 'BOT';
-    }
-
-    /**
      * The event's broadcast name.
      */
     public function broadcastAs(): string
     {
-        return 'chat-message.created';
+        return 'chat-message.deleted';
     }
 }

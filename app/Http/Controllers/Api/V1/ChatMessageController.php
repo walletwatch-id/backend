@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\ChatMessageCreated;
+use App\Events\ChatMessageUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChatMessage\StoreChatMessageRequest;
 use App\Http\Requests\ChatMessage\UpdateChatMessageRequest;
@@ -54,6 +56,8 @@ class ChatMessageController extends Controller
         ]);
         $chatMessage->save();
 
+        event(new ChatMessageCreated($chatMessage));
+
         return ResponseFormatter::singleton('chat_message', $chatMessage, 201);
     }
 
@@ -78,6 +82,8 @@ class ChatMessageController extends Controller
     {
         $chatMessage->fill($request->validated());
         $chatMessage->save();
+
+        event(new ChatMessageUpdated($chatMessage));
 
         return ResponseFormatter::singleton('chat_message', $chatMessage);
     }
