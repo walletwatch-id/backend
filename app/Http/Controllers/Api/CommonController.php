@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Utils\JsendFormatter;
 use Illuminate\Foundation\Events\DiagnosingHealth;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Event;
 
 class CommonController extends Controller
 {
