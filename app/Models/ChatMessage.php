@@ -20,6 +20,7 @@ class ChatMessage extends Model
         'session_id',
         'sender',
         'message',
+        'status',
     ];
 
     /**
