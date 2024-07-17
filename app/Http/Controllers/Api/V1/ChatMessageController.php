@@ -27,7 +27,7 @@ class ChatMessageController extends Controller
     {
         $chatMessages = QueryBuilder::for(ChatMessage::class)
             ->allowedIncludes([
-                AllowedInclude::relationship('chat_session', 'chatSession'),
+                AllowedInclude::relationship('session', 'chatSession'),
             ])
             ->allowedFilters([
                 'sender',
@@ -37,7 +37,7 @@ class ChatMessageController extends Controller
                 'created_at',
                 'updated_at',
             ])
-            ->where('chat_session_id', $chatSession->id)
+            ->where('session_id', $chatSession->id)
             ->paginate($request->query('per_page', 10));
 
         return ResponseFormatter::collection('chat_messages', $chatMessages);
@@ -50,7 +50,7 @@ class ChatMessageController extends Controller
     {
         $chatMessage = new ChatMessage($request->validated());
         $chatMessage->fill([
-            'chat_session_id' => $chatSession->id,
+            'session_id' => $chatSession->id,
         ]);
         $chatMessage->save();
 
@@ -63,6 +63,9 @@ class ChatMessageController extends Controller
     public function show(ChatMessage $chatMessage): JsonResponse
     {
         $chatMessage = QueryBuilder::for(ChatMessage::where('id', $chatMessage->id))
+            ->allowedIncludes([
+                AllowedInclude::relationship('session', 'chatSession'),
+            ])
             ->firstOrFail();
 
         return ResponseFormatter::singleton('chat_message', $chatMessage);

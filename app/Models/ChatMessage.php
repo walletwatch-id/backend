@@ -17,7 +17,7 @@ class ChatMessage extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'chat_session_id',
+        'session_id',
         'sender',
         'message',
     ];
@@ -32,6 +32,6 @@ class ChatMessage extends Model
 
     public function chatSession()
     {
-        return $this->belongsTo(ChatSession::class);
+        return $this->belongsTo(ChatSession::class, 'session_id');
     }
 }

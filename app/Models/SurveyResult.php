@@ -46,7 +46,7 @@ class SurveyResult extends Model
 
     public function surveyResultAnswers(): HasMany
     {
-        return $this->hasMany(SurveyResultAnswer::class);
+        return $this->hasMany(SurveyResultAnswer::class, 'result_id');
     }
 
     public function user(): BelongsTo
