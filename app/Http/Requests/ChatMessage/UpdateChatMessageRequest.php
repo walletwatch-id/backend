@@ -14,7 +14,6 @@ class UpdateChatMessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sender' => ['sometimes', 'string', 'in:USER,BOT'],
             'message' => ['sometimes', 'string'],
         ];
     }

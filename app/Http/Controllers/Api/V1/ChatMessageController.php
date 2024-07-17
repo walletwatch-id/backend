@@ -53,7 +53,10 @@ class ChatMessageController extends Controller
         $chatMessage = new ChatMessage($request->validated());
         $chatMessage->fill([
             'session_id' => $chatSession->id,
+            'sender' => 'USER',
+            'status' => 'COMPLETED',
         ]);
+        $chatMessage->hash = md5($chatMessage->message);
         $chatMessage->save();
 
         event(new ChatMessageCreated($chatMessage));

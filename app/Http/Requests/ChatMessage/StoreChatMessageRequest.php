@@ -14,7 +14,6 @@ class StoreChatMessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sender' => ['required', 'string', 'in:USER,BOT'],
             'message' => ['required', 'string'],
         ];
     }

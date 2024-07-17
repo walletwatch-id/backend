@@ -24,6 +24,15 @@ class ChatSession extends Model
     ];
 
     /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'external_id',
+    ];
+
+    /**
      * Prepare a date for array / JSON serialization.
      */
     protected function serializeDate(DateTimeInterface $date): string

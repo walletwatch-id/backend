@@ -25,6 +25,11 @@ return new class extends Migration
             $table->foreignUuid('session_id')->constrained('chat_sessions')->cascadeOnDelete();
             $table->enum('sender', ['USER', 'BOT']);
             $table->text('message');
+            $table->string('hash')->nullable();
+            $table->enum('status', [
+                'CREATED', 'QUEUED', 'IN_PROGRESS', 'CANCELLED', 'FAILED', 'COMPLETED',
+                'INCOMPLETE', 'EXPIRED',
+            ])->default('CREATED');
             $table->timestamps();
         });
     }
