@@ -167,7 +167,7 @@ class AssistantFacadeImpl implements AssistantFacade
                         $response->status = 'CREATED';
                         $response->save();
 
-                        event(new ChatMessageCreated($response));
+                        broadcast(new ChatMessageCreated($response));
 
                         break;
                     case 'thread.run.queued':
@@ -175,7 +175,7 @@ class AssistantFacadeImpl implements AssistantFacade
                         $response->status = 'QUEUED';
                         $response->save();
 
-                        event(new ChatMessageUpdated($response));
+                        broadcast(new ChatMessageUpdated($response));
 
                         break;
                     case 'thread.run.in_progress':
@@ -183,7 +183,7 @@ class AssistantFacadeImpl implements AssistantFacade
                         $response->status = 'IN_PROGRESS';
                         $response->save();
 
-                        event(new ChatMessageUpdated($response));
+                        broadcast(new ChatMessageUpdated($response));
 
                         break;
                     case 'thread.run.requires_action':
@@ -304,14 +304,14 @@ class AssistantFacadeImpl implements AssistantFacade
                 $response->hash = md5($summary);
                 $response->save();
 
-                event(new ChatMessageUpdated($response));
+                broadcast(new ChatMessageUpdated($response));
 
                 break;
             case 'cancelled':
                 $response->status = 'CANCELLED';
                 $response->save();
 
-                event(new ChatMessageUpdated($response));
+                broadcast(new ChatMessageUpdated($response));
 
                 break;
             case 'failed':
@@ -324,7 +324,7 @@ class AssistantFacadeImpl implements AssistantFacade
                     ]);
                 }
 
-                event(new ChatMessageUpdated($response));
+                broadcast(new ChatMessageUpdated($response));
 
                 break;
             case 'incomplete':
@@ -335,14 +335,14 @@ class AssistantFacadeImpl implements AssistantFacade
                 $response->hash = md5($summary);
                 $response->save();
 
-                event(new ChatMessageUpdated($response));
+                broadcast(new ChatMessageUpdated($response));
 
                 break;
             case 'expired':
                 $response->status = 'EXPIRED';
                 $response->save();
 
-                event(new ChatMessageUpdated($response));
+                broadcast(new ChatMessageUpdated($response));
 
                 break;
         }
