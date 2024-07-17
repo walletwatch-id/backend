@@ -17,6 +17,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | OpenAI Assistant
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify your OpenAI Assistant. This will be used to interact
+    | with the OpenAI Assistant API - you can find your Assistant ID on your
+    | OpenAI dashboard, at https://openai.com.
+    */
+
+    'assistant' => env('OPENAI_ASSISTANT'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Request Timeout
     |--------------------------------------------------------------------------
     |
