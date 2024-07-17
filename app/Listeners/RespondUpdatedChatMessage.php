@@ -34,9 +34,7 @@ class RespondUpdatedChatMessage implements ShouldQueue
                 ->get();
 
             foreach ($nextChatMessages as $nextChatMessage) {
-                $nextChatMessage->delete();
-
-                event(new ChatMessageDeleted($nextChatMessage));
+                broadcast(new ChatMessageDeleted($nextChatMessage));
             }
 
             $this->assistantFacade->generateResponse($event->chatMessage);
