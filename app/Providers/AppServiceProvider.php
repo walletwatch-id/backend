@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\Client;
 use App\Models\PersonalAccessClient;
+use App\Repositories\AssistantFacade;
+use App\Repositories\AssistantFacadeImpl;
 use App\Repositories\StorageFacade;
 use App\Repositories\StorageFacadeImpl;
 use App\Repositories\TransactionRepository;
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public $singletons = [
         StorageFacade::class => StorageFacadeImpl::class,
         TransactionRepository::class => TransactionRepositoryImpl::class,
+        AssistantFacade::class => AssistantFacadeImpl::class,
     ];
 
     /**
