@@ -30,7 +30,7 @@ class ChatSessionController extends Controller
                 AllowedInclude::relationship('messages', 'chatMessages'),
             ]);
 
-        if ($request->user->role === 'ADMIN') {
+        if ($request->user()->role === 'ADMIN') {
             $chatSessions = $chatSessions
                 ->allowedFilters([
                     'user_id',
@@ -48,8 +48,7 @@ class ChatSessionController extends Controller
                 ->allowedSorts([
                     'title',
                 ])
-
-                ->where('user_id', $request->user->id);
+                ->where('user_id', $request->user()->id);
         }
 
         $chatSessions = $chatSessions->paginate($request->query('per_page', 10));
@@ -64,9 +63,9 @@ class ChatSessionController extends Controller
     {
         $chatSession = new ChatSession($request->validated());
 
-        if ($request->user->role !== 'ADMIN') {
+        if ($request->user()->role !== 'ADMIN') {
             $chatSession->fill([
-                'user_id' => $request->user->id,
+                'user_id' => $request->user()->id,
             ]);
         }
 

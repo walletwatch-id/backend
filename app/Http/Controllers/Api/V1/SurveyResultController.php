@@ -32,7 +32,7 @@ class SurveyResultController extends Controller
                 AllowedInclude::relationship('answer', 'surveyResultAnswers'),
             ]);
 
-        if ($request->user->role === 'ADMIN') {
+        if ($request->user()->role === 'ADMIN') {
             $surveyResults = $surveyResults
                 ->allowedFilters([
                     'user_id',
@@ -52,7 +52,7 @@ class SurveyResultController extends Controller
                     'result',
                     'type',
                 ])
-                ->where('user_id', $request->user->id);
+                ->where('user_id', $request->user()->id);
         }
 
         $surveyResults = $surveyResults
@@ -72,9 +72,9 @@ class SurveyResultController extends Controller
             'survey_id' => $survey->id,
         ]);
 
-        if ($request->user->role !== 'ADMIN') {
+        if ($request->user()->role !== 'ADMIN') {
             $surveyResult->fill([
-                'user_id' => $request->user->id,
+                'user_id' => $request->user()->id,
             ]);
         }
 

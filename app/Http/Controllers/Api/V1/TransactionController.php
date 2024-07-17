@@ -29,7 +29,7 @@ class TransactionController extends Controller
                 'paylater',
             ]);
 
-        if ($request->user->role === 'ADMIN') {
+        if ($request->user()->role === 'ADMIN') {
             $transactions = $transactions
                 ->allowedFilters([
                     'user_id',
@@ -47,7 +47,7 @@ class TransactionController extends Controller
                 ->allowedSorts([
                     'paylater_id',
                 ])
-                ->where('user_id', $request->user->id);
+                ->where('user_id', $request->user()->id);
         }
 
         $transactions = $transactions->paginate($request->query('per_page', 10));
@@ -62,9 +62,9 @@ class TransactionController extends Controller
     {
         $transaction = new Transaction($request->validated());
 
-        if ($request->user->role !== 'ADMIN') {
+        if ($request->user()->role !== 'ADMIN') {
             $transaction->fill([
-                'user_id' => $request->user->id,
+                'user_id' => $request->user()->id,
             ]);
         }
 

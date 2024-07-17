@@ -29,7 +29,7 @@ class PersonalitySurveyController extends Controller
                 AllowedInclude::relationship('questions', 'surveyQuestions'),
             ]);
 
-        if ($request->user->role === 'ADMIN') {
+        if ($request->user()->role === 'ADMIN') {
             $personalitySurveys = $personalitySurveys
                 ->allowedFilters([
                     'name',

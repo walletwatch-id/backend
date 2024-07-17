@@ -29,7 +29,7 @@ class FinancialSurveyController extends Controller
                 AllowedInclude::relationship('questions', 'surveyQuestions'),
             ]);
 
-        if ($request->user->role === 'ADMIN') {
+        if ($request->user()->role === 'ADMIN') {
             $financialSurveys = $financialSurveys
                 ->allowedFilters([
                     'name',
