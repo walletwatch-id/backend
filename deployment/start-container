@@ -32,6 +32,9 @@ elif [ ${container_mode} = "reverb" ]; then
 elif [ ${container_mode} = "scheduler" ]; then
     init
     exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.scheduler.conf
+elif [ ${container_mode} = "queue-worker" ]; then
+    init
+    exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.queue-worker.conf
 elif [ ${container_mode} = "worker" ]; then
     init
     exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.worker.conf

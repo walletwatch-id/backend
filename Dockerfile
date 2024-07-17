@@ -67,6 +67,7 @@ ENV USER=octane \
     OCTANE_SERVER=swoole \
     WITH_REVERB=false \
     WITH_SCHEDULER=false \
+    WITH_QUEUE_WORKER=false \
     APP_NAME=WalletWatch \
     APP_ENV=prod \
     APP_DEBUG=false
