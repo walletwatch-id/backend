@@ -96,17 +96,23 @@ Route::group([
     });
 });
 
-Route::group(['prefix' => 'api'], function () {
-    Route::get('/', 'App\Http\Controllers\Api\CommonController@greet');
-    Route::get('/status', 'App\Http\Controllers\Api\CommonController@checkHealth');
+Route::group([
+    'as' => 'api.',
+    'prefix' => 'api',
+    'namespace' => 'App\Http\Controllers\Api',
+], function () {
+    Route::get('/', 'CommonController@greet');
+    Route::get('/status', 'CommonController@checkHealth');
 
-    Route::group(['prefix' => 'v1'], function () {
-        Route::get('/', 'App\Http\Controllers\Api\V1\CommonController@greet');
+    Route::group([
+        'as' => 'v1.',
+        'prefix' => 'v1',
+        'namespace' => 'V1',
+    ], function () {
+        Route::get('/', 'CommonController@greet');
+        Route::get('blobs/{blob}', 'BlobController');
 
-        Route::group([
-            'namespace' => 'App\Http\Controllers\Api\V1',
-            'middleware' => ['auth:api', 'verified'],
-        ], function () {
+        Route::group(['middleware' => ['auth:api', 'verified']], function () {
             Route::apiResources([
                 'users' => 'UserController',
                 'paylaters' => 'PaylaterController',
@@ -141,7 +147,5 @@ Route::group(['prefix' => 'api'], function () {
             Route::apiResource('chat-sessions.chat-messages', 'ChatMessageController')
                 ->shallow();
         });
-
-        Route::get('blobs/{blob}', 'App\Http\Controllers\Api\V1\BlobController');
     });
 });
