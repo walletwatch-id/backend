@@ -32,7 +32,8 @@ class UserController extends Controller
         $users = QueryBuilder::for(User::class)
             ->allowedIncludes([
                 'transactions',
-                'surveys',
+                'statistics',
+                AllowedInclude::relationship('survey_results', 'surveyResults'),
                 AllowedInclude::relationship('chat_sessions', 'chatSessions'),
             ])
             ->allowedFilters([
@@ -83,7 +84,8 @@ class UserController extends Controller
         $user = QueryBuilder::for(User::where('id', $user->id))
             ->allowedIncludes([
                 'transactions',
-                'surveys',
+                'statistics',
+                AllowedInclude::relationship('survey_results', 'surveyResults'),
                 AllowedInclude::relationship('chat_sessions', 'chatSessions'),
             ])
             ->firstOrFail();

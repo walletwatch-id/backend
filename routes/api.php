@@ -150,6 +150,8 @@ Route::group(['prefix' => 'api'], function () {
                 ->only(['show', 'update', 'destroy']);
             Route::apiResource('survey-results.survey-result-answers', 'SurveyResultAnswerController')
                 ->shallow();
+            Route::apiResource('statistics', 'StatisticController')
+                ->only(['index', 'show']);
             Route::apiResource('chat-sessions.chat-messages', 'ChatMessageController')
                 ->shallow();
         });
