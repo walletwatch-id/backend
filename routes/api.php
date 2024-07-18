@@ -1,6 +1,5 @@
 <?php
 
-use App\Utils\JsendFormatter;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -98,24 +97,11 @@ Route::group([
 });
 
 Route::group(['prefix' => 'api'], function () {
-    Route::get('/', function () {
-        return JsendFormatter::success([
-            'message' => config('api.root_welcome_message'),
-            'core_version' => config('app.version'),
-        ]);
-    });
-
+    Route::get('/', 'App\Http\Controllers\Api\CommonController@greet');
     Route::get('/status', 'App\Http\Controllers\Api\CommonController@checkHealth');
 
     Route::group(['prefix' => 'v1'], function () {
-        Route::get('/', function () {
-            return JsendFormatter::success([
-                'message' => config('api.v1_welcome_message'),
-                'core_version' => config('app.version'),
-                'api_version' => config('api.v1_version'),
-                'documentation' => config('api.v1_documentation'),
-            ]);
-        });
+        Route::get('/', 'App\Http\Controllers\Api\V1\CommonController@greet');
 
         Route::group([
             'namespace' => 'App\Http\Controllers\Api\V1',
