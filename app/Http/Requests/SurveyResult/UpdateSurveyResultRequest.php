@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\SurveyResult;
 
+use DateTimeInterface;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -23,7 +24,7 @@ class UpdateSurveyResultRequest extends FormRequest
                 ),
             ],
             'survey_id' => ['sometimes', 'uuid', 'exists:surveys,id'],
-            'date' => ['sometimes', 'date_format:ATOM'],
+            'date' => ['sometimes', 'date_format:'.DateTimeInterface::ATOM],
         ];
     }
 }

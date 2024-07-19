@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Transaction;
 
+use DateTimeInterface;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,8 +26,8 @@ class StoreTransactionRequest extends FormRequest
             'paylater_id' => ['required', 'uuid', 'exists:paylaters,id'],
             'monthly_installment' => ['required', 'integer', 'min:1'],
             'period' => ['required', 'integer', 'min:1'],
-            'first_installment_datetime' => ['required', 'date_format:ATOM'],
-            'transaction_datetime' => ['required', 'date_format:ATOM'],
+            'first_installment_datetime' => ['required', 'date_format:'.DateTimeInterface::ATOM],
+            'transaction_datetime' => ['required', 'date_format:'.DateTimeInterface::ATOM],
         ];
     }
 }
