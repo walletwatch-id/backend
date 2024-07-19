@@ -16,7 +16,7 @@ class PersonalitySurveyController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(Survey::class, 'personality_survey');
+        $this->authorizeResource(Survey::class, 'survey');
     }
 
     /**
@@ -56,22 +56,20 @@ class PersonalitySurveyController extends Controller
      */
     public function store(StoreSurveyRequest $request): JsonResponse
     {
-        $personalitySurveys = new Survey($request->validated());
-        $personalitySurveys->fill([
-            'type' => 'PERSONALITY',
-        ]);
+        $personalitySurvey = new Survey($request->validated());
+        $personalitySurvey->type = 'PERSONALITY';
 
-        $personalitySurveys->save();
+        $personalitySurvey->save();
 
-        return ResponseFormatter::singleton('personality_survey', $personalitySurveys, 201);
+        return ResponseFormatter::singleton('personality_survey', $personalitySurvey, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Survey $personalitySurveys): JsonResponse
+    public function show(Survey $survey): JsonResponse
     {
-        $personalitySurveys = QueryBuilder::for(Survey::where('id', $personalitySurveys->id)
+        $personalitySurvey = QueryBuilder::for(Survey::where('id', $survey->id)
             ->where('type', 'PERSONALITY')
         )
             ->allowedIncludes([
@@ -79,27 +77,27 @@ class PersonalitySurveyController extends Controller
             ])
             ->firstOrFail();
 
-        return ResponseFormatter::singleton('personality_survey', $personalitySurveys);
+        return ResponseFormatter::singleton('personality_survey', $personalitySurvey);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSurveyRequest $request, Survey $personalitySurveys): JsonResponse
+    public function update(UpdateSurveyRequest $request, Survey $survey): JsonResponse
     {
-        $personalitySurveys->fill($request->validated());
-        $personalitySurveys->save();
+        $survey->fill($request->validated());
+        $survey->save();
 
-        return ResponseFormatter::singleton('personality_survey', $personalitySurveys);
+        return ResponseFormatter::singleton('personality_survey', $survey);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Survey $personalitySurveys): JsonResponse
+    public function destroy(Survey $survey): JsonResponse
     {
-        $personalitySurveys->delete();
+        $survey->delete();
 
-        return ResponseFormatter::singleton('personality_survey', $personalitySurveys);
+        return ResponseFormatter::singleton('personality_survey', $survey);
     }
 }

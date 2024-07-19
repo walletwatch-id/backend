@@ -121,6 +121,11 @@ Route::group([
                 'financial-surveys' => 'FinancialSurveyController',
                 'personality-surveys' => 'PersonalitySurveyController',
                 'chat-sessions' => 'ChatSessionController',
+            ], [
+                'parameters' => [
+                    'financial-surveys' => 'survey',
+                    'personality-surveys' => 'survey',
+                ],
             ]);
             Route::apiResource('paylaters.hotlines', 'PaylaterHotlineController')
                 ->only(['index', 'store']);
@@ -129,14 +134,18 @@ Route::group([
             Route::apiResource('hotlines', 'HotlineController')
                 ->only(['show', 'update', 'destroy']);
             Route::apiResource('financial-surveys.survey-questions', 'SurveyQuestionController')
+                ->parameter('financial-surveys', 'survey')
                 ->only(['index', 'store']);
             Route::apiResource('personality-surveys.survey-questions', 'SurveyQuestionController')
+                ->parameter('personality-surveys', 'survey')
                 ->only(['index', 'store']);
             Route::apiResource('survey-questions', 'SurveyQuestionController')
                 ->only(['show', 'update', 'destroy']);
             Route::apiResource('financial-surveys.survey-results', 'SurveyResultController')
+                ->parameter('financial-surveys', 'survey')
                 ->only(['index', 'store']);
             Route::apiResource('personality-surveys.survey-results', 'SurveyResultController')
+                ->parameter('personality-surveys', 'survey')
                 ->only(['index', 'store']);
             Route::apiResource('survey-results', 'SurveyResultController')
                 ->only(['show', 'update', 'destroy']);

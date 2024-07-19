@@ -53,7 +53,7 @@ class StatisticController extends Controller
 
         $statistic = $statistic->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('statistic', $statistic);
+        return ResponseFormatter::collection('statistics', $statistic);
     }
 
     /**

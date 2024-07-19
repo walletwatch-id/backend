@@ -16,7 +16,7 @@ class FinancialSurveyController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(Survey::class, 'financial_survey');
+        $this->authorizeResource(Survey::class, 'survey');
     }
 
     /**
@@ -56,22 +56,20 @@ class FinancialSurveyController extends Controller
      */
     public function store(StoreSurveyRequest $request): JsonResponse
     {
-        $financialSurveys = new Survey($request->validated());
-        $financialSurveys->fill([
-            'type' => 'FINANCIAL',
-        ]);
+        $financialSurvey = new Survey($request->validated());
+        $financialSurvey->type = 'FINANCIAL';
 
-        $financialSurveys->save();
+        $financialSurvey->save();
 
-        return ResponseFormatter::singleton('financial_survey', $financialSurveys, 201);
+        return ResponseFormatter::singleton('financial_survey', $financialSurvey, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Survey $financialSurveys): JsonResponse
+    public function show(Survey $survey): JsonResponse
     {
-        $financialSurveys = QueryBuilder::for(Survey::where('id', $financialSurveys->id)
+        $financialSurvey = QueryBuilder::for(Survey::where('id', $survey->id)
             ->where('type', 'FINANCIAL')
         )
             ->allowedIncludes([
@@ -79,27 +77,27 @@ class FinancialSurveyController extends Controller
             ])
             ->firstOrFail();
 
-        return ResponseFormatter::singleton('financial_survey', $financialSurveys);
+        return ResponseFormatter::singleton('financial_survey', $financialSurvey);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSurveyRequest $request, Survey $financialSurveys): JsonResponse
+    public function update(UpdateSurveyRequest $request, Survey $survey): JsonResponse
     {
-        $financialSurveys->fill($request->validated());
-        $financialSurveys->save();
+        $survey->fill($request->validated());
+        $survey->save();
 
-        return ResponseFormatter::singleton('financial_survey', $financialSurveys);
+        return ResponseFormatter::singleton('financial_survey', $survey);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Survey $financialSurveys): JsonResponse
+    public function destroy(Survey $survey): JsonResponse
     {
-        $financialSurveys->delete();
+        $survey->delete();
 
-        return ResponseFormatter::singleton('financial_survey', $financialSurveys);
+        return ResponseFormatter::singleton('financial_survey', $survey);
     }
 }
