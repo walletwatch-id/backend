@@ -12,16 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('statistics', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->unsignedTinyInteger('month');
             $table->unsignedInteger('year');
             $table->string('personality')->nullable();
-            $table->decimal('ratio', 5, 4)->default(0);
-            $table->unsignedBigInteger('limit')->default(0);
-            $table->unsignedBigInteger('total_installment')->default(0);
             $table->unsignedBigInteger('total_transaction')->default(0);
+            $table->unsignedBigInteger('total_installment')->default(0);
+            $table->unsignedBigInteger('total_income')->default(0);
+            $table->decimal('ratio', 5, 4)->default(0);
             $table->timestamps();
+            $table->unique(['user_id', 'month', 'year']);
         });
     }
 

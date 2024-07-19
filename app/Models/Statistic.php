@@ -22,10 +22,10 @@ class Statistic extends Model
         'month',
         'year',
         'personality',
-        'ratio',
-        'limit',
-        'total_installment',
         'total_transaction',
+        'total_installment',
+        'total_income',
+        'ratio',
     ];
 
     /**
