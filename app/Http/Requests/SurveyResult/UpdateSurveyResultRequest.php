@@ -23,7 +23,6 @@ class UpdateSurveyResultRequest extends FormRequest
                     ['prohibited'],
                 ),
             ],
-            'survey_id' => ['sometimes', 'uuid', 'exists:surveys,id'],
             'date' => ['sometimes', 'date_format:'.DateTimeInterface::ATOM],
         ];
     }

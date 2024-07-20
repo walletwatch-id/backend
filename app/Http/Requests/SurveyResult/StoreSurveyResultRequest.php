@@ -23,7 +23,6 @@ class StoreSurveyResultRequest extends FormRequest
                     ['prohibited'],
                 ),
             ],
-            'survey_id' => ['required', 'uuid', 'exists:surveys,id'],
             'date' => ['required', 'date_format:'.DateTimeInterface::ATOM],
         ];
     }
