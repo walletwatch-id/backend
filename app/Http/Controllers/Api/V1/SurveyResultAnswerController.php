@@ -49,7 +49,7 @@ class SurveyResultAnswerController extends Controller
      */
     public function store(StoreSurveyResultAnswerRequest $request, SurveyResult $surveyResult): JsonResponse
     {
-        if (! $surveyResult->survey->survey_questions()->where('id', $request->question_id)->exists()) {
+        if (! $surveyResult->survey->surveyQuestions()->where('id', $request->question_id)->exists()) {
             throw ValidationException::withMessages([
                 'question_id' => ['Question does not exist.'],
             ]);
