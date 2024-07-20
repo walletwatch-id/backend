@@ -9,6 +9,7 @@ use App\Models\Survey;
 use App\Utils\ResponseFormatter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -33,7 +34,7 @@ class FinancialSurveyController extends Controller
             $financialSurveys = $financialSurveys
                 ->allowedFilters([
                     'name',
-                    'is_active',
+                    AllowedFilter::exact('is_active'),
                 ])
                 ->allowedSorts([
                     'name',
