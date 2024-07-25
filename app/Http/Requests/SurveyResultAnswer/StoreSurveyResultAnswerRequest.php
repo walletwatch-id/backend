@@ -13,9 +13,16 @@ class StoreSurveyResultAnswerRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'question_id' => ['required', 'uuid', 'exists:survey_questions,id'],
-            'answer' => ['required', 'string'],
-        ];
+        if (is_array($this->all())) {
+            return [
+                '*.question_id' => ['required', 'uuid', 'exists:survey_questions,id'],
+                '*.answer' => ['required', 'string'],
+            ];
+        } else {
+            return [
+                'question_id' => ['required', 'uuid', 'exists:survey_questions,id'],
+                'answer' => ['required', 'string'],
+            ];
+        }
     }
 }

@@ -19,6 +19,15 @@ class ResponseFormatter
      * @param  int  $status  HTTP status code
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
+    public static function unpaginatedCollection(string $resourcesName, $data, int $status = 200, $extraHeaders = [])
+    {
+        return JsendFormatter::success([$resourcesName => $data], $status, $extraHeaders);
+    }
+
+    /**
+     * @param  int  $status  HTTP status code
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public static function collection(string $resourcesName, LengthAwarePaginator $data, int $status = 200, $extraHeaders = [])
     {
         return JsendFormatter::success([

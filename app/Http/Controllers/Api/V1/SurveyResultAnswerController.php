@@ -49,20 +49,42 @@ class SurveyResultAnswerController extends Controller
      */
     public function store(StoreSurveyResultAnswerRequest $request, SurveyResult $surveyResult): JsonResponse
     {
-        if (! $surveyResult->survey->surveyQuestions()->where('id', $request->question_id)->exists()) {
-            throw ValidationException::withMessages([
-                'question_id' => ['Question does not exist.'],
+        if (is_array($request->validated())) {
+            $surveyResultAnswers = [];
+
+            foreach ($request->validated() as $validated) {
+                if (! $surveyResult->survey->surveyQuestions()->where('id', $validated->question_id)->exists()) {
+                    throw ValidationException::withMessages([
+                        'question_id' => ['Question does not exist.'],
+                    ]);
+                }
+
+                $surveyResultAnswer = new SurveyResultAnswer($validated);
+                $surveyResultAnswer->fill([
+                    'result_id' => $surveyResult->id,
+                ]);
+                $surveyResultAnswers[] = $surveyResultAnswer;
+            }
+
+            SurveyResultAnswer::insert($surveyResultAnswers);
+
+            return ResponseFormatter::unpaginatedCollection('survey_result_answers', $surveyResultAnswers, 201);
+        } else {
+            if (! $surveyResult->survey->surveyQuestions()->where('id', $request->question_id)->exists()) {
+                throw ValidationException::withMessages([
+                    'question_id' => ['Question does not exist.'],
+                ]);
+            }
+
+            $surveyResultAnswer = new SurveyResultAnswer($request->validated());
+            $surveyResultAnswer->fill([
+                'result_id' => $surveyResult->id,
             ]);
+
+            $surveyResultAnswer->save();
+
+            return ResponseFormatter::singleton('survey_result_answer', $surveyResultAnswer, 201);
         }
-
-        $surveyResultAnswer = new SurveyResultAnswer($request->validated());
-        $surveyResultAnswer->fill([
-            'result_id' => $surveyResult->id,
-        ]);
-
-        $surveyResultAnswer->save();
-
-        return ResponseFormatter::singleton('survey_result_answer', $surveyResultAnswer, 201);
     }
 
     /**
@@ -85,6 +107,12 @@ class SurveyResultAnswerController extends Controller
      */
     public function update(UpdateSurveyResultAnswerRequest $request, SurveyResultAnswer $surveyResultAnswer): JsonResponse
     {
+        if (! $surveyResultAnswer->surveyResult->survey->surveyQuestions()->where('id', $request->question_id)->exists()) {
+            throw ValidationException::withMessages([
+                'question_id' => ['Question does not exist.'],
+            ]);
+        }
+
         $surveyResultAnswer->fill($request->validated());
         $surveyResultAnswer->save();
 
