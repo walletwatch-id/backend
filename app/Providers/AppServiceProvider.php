@@ -12,6 +12,7 @@ use App\Repositories\TransactionRepository;
 use App\Repositories\TransactionRepositoryImpl;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
@@ -35,6 +36,10 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         Passport::ignoreRoutes();
+        Http::macro('runpod', function () {
+            return Http::withToken(config('runpod.api_key'))
+                ->baseUrl(config('runpod.endpoint'));
+        });
     }
 
     /**
