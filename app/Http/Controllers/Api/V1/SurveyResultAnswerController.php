@@ -10,9 +10,11 @@ use App\Models\SurveyResultAnswer;
 use App\Utils\ResponseFormatter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
+use Symfony\Component\Uid\Uuid;
 
 class SurveyResultAnswerController extends Controller
 {
@@ -49,19 +51,24 @@ class SurveyResultAnswerController extends Controller
      */
     public function store(StoreSurveyResultAnswerRequest $request, SurveyResult $surveyResult): JsonResponse
     {
-        if (is_array($request->validated())) {
+        $data = $request->validated();
+        if (is_array($data)) {
             $surveyResultAnswers = [];
+            $timestamp = Carbon::now();
 
-            foreach ($request->validated() as $validated) {
-                if (! $surveyResult->survey->surveyQuestions()->where('id', $validated->question_id)->exists()) {
+            foreach ($data as $datum) {
+                if (! $surveyResult->survey->surveyQuestions()->where('id', $datum['question_id'])->exists()) {
                     throw ValidationException::withMessages([
                         'question_id' => ['Question does not exist.'],
                     ]);
                 }
 
-                $surveyResultAnswer = new SurveyResultAnswer($validated);
-                $surveyResultAnswer->fill([
+                $surveyResultAnswer = new SurveyResultAnswer($datum);
+                $surveyResultAnswer->forceFill([
+                    'id' => Uuid::v7(),
                     'result_id' => $surveyResult->id,
+                    'created_at' => $timestamp,
+                    'updated_at' => $timestamp,
                 ]);
                 $surveyResultAnswers[] = $surveyResultAnswer;
             }
@@ -70,13 +77,13 @@ class SurveyResultAnswerController extends Controller
 
             return ResponseFormatter::unpaginatedCollection('survey_result_answers', $surveyResultAnswers, 201);
         } else {
-            if (! $surveyResult->survey->surveyQuestions()->where('id', $request->question_id)->exists()) {
+            if (! $surveyResult->survey->surveyQuestions()->where('id', $data['question_id'])->exists()) {
                 throw ValidationException::withMessages([
                     'question_id' => ['Question does not exist.'],
                 ]);
             }
 
-            $surveyResultAnswer = new SurveyResultAnswer($request->validated());
+            $surveyResultAnswer = new SurveyResultAnswer($data);
             $surveyResultAnswer->fill([
                 'result_id' => $surveyResult->id,
             ]);
