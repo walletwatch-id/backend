@@ -6,6 +6,8 @@ use App\Models\Client;
 use App\Models\PersonalAccessClient;
 use App\Repositories\AssistantFacade;
 use App\Repositories\AssistantFacadeImpl;
+use App\Repositories\MachineLearningFacade;
+use App\Repositories\MachineLearningFacadeImpl;
 use App\Repositories\StorageFacade;
 use App\Repositories\StorageFacadeImpl;
 use App\Repositories\TransactionRepository;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         StorageFacade::class => StorageFacadeImpl::class,
         TransactionRepository::class => TransactionRepositoryImpl::class,
         AssistantFacade::class => AssistantFacadeImpl::class,
+        MachineLearningFacade::class => MachineLearningFacadeImpl::class,
     ];
 
     /**
