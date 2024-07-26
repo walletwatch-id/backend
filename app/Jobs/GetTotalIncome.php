@@ -7,12 +7,13 @@ use App\Events\StatisticUpdated;
 use App\Models\Statistic;
 use App\Models\SurveyResult;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
 
-class GetTotalIncome implements ShouldQueue
+class GetTotalIncome implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, Queueable, SerializesModels;
 
@@ -22,6 +23,14 @@ class GetTotalIncome implements ShouldQueue
     public function __construct(
         public SurveyResult $surveyResult,
     ) {}
+
+    /**
+     * Get the unique ID for the job.
+     */
+    public function uniqueId(): string
+    {
+        return $this->surveyResult->id;
+    }
 
     /**
      * Execute the job.

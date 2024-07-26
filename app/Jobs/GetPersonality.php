@@ -8,12 +8,13 @@ use App\Models\Statistic;
 use App\Models\SurveyResult;
 use App\Repositories\MachineLearningFacade;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
 
-class GetPersonality implements ShouldQueue
+class GetPersonality implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, Queueable, SerializesModels;
 
@@ -23,6 +24,14 @@ class GetPersonality implements ShouldQueue
     public function __construct(
         public SurveyResult $surveyResult,
     ) {}
+
+    /**
+     * Get the unique ID for the job.
+     */
+    public function uniqueId(): string
+    {
+        return $this->surveyResult->id;
+    }
 
     /**
      * Execute the job.

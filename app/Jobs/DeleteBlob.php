@@ -29,6 +29,14 @@ class DeleteBlob implements ShouldBeUnique, ShouldQueue
     public $tries = 5;
 
     /**
+     * Get the unique ID for the job.
+     */
+    public function uniqueId(): string
+    {
+        return $this->id;
+    }
+
+    /**
      * Execute the job.
      */
     public function handle(StorageFacade $storageFacade): void
