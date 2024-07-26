@@ -7,13 +7,13 @@ use App\Events\StatisticUpdated;
 use App\Models\Statistic;
 use App\Models\SurveyResult;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
 
-class GetTotalIncome implements ShouldBeUnique, ShouldQueue
+class GetTotalIncome implements ShouldBeUniqueUntilProcessing, ShouldQueue
 {
     use Dispatchable, Queueable, SerializesModels;
 
