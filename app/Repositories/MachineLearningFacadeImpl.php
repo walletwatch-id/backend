@@ -64,10 +64,10 @@ class MachineLearningFacadeImpl implements MachineLearningFacade
                 'input' => [
                     'model' => 'limit',
                     'features' => [
-                        'total_income' => $features['totalIncome'],
-                        'total_installment' => $features['totalInstallment'],
+                        'total_income' => $features['total_income'],
+                        'total_installment' => $features['total_installment'],
                         'personality' => $features['personality'],
-                        'last_month_limit' => $features['lastMonthLimit'],
+                        'last_month_limit' => $features['last_month_limit'],
                     ],
                 ],
             ])
