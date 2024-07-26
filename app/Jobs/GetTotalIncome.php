@@ -28,63 +28,68 @@ class GetTotalIncome implements ShouldQueue
      */
     public function handle(): void
     {
-        $surveyAnswer = $this->surveyResult->surveyResultAnswers()
+        $surveyQuestionsCount = $this->surveyResult->survey()->withCount('surveyQuestions')
+            ->get();
+
+        $surveyAnswers = $this->surveyResult->surveyResultAnswers()
             ->orderBy('question_id', 'asc')
             ->get()
             ->toArray();
 
-        $totalIncome = (int) $surveyAnswer[0]['answer'];
+        if (count($surveyAnswers) === $surveyQuestionsCount) {
+            $totalIncome = (int) $surveyAnswers[0]['answer'];
 
-        $currentYear = Carbon::now()->format('Y');
-        $currentMonth = Carbon::now()->format('m');
-        $currentUserId = $this->surveyResult->user_id;
+            $currentYear = Carbon::now()->format('Y');
+            $currentMonth = Carbon::now()->format('m');
+            $currentUserId = $this->surveyResult->user_id;
 
-        $year = $this->surveyResult->date->format('Y');
-        $month = $this->surveyResult->date->format('m');
+            $year = $this->surveyResult->date->format('Y');
+            $month = $this->surveyResult->date->format('m');
 
-        $previousIncome = Statistic::where('user_id', $currentUserId)
-            ->where('year', $year)
-            ->where('month', $month)
-            ->first()
-            ->total_income ?? 0;
-
-        while ($month <= $currentMonth && $year <= $currentYear) {
-            $statistic = Statistic::where('user_id', $currentUserId)
+            $previousIncome = Statistic::where('user_id', $currentUserId)
                 ->where('year', $year)
                 ->where('month', $month)
-                ->first();
+                ->first()
+                ->total_income ?? 0;
 
-            if ($statistic) {
-                if ($statistic->total_income === $previousIncome) {
-                    $statistic->fill([
+            while ($month <= $currentMonth && $year <= $currentYear) {
+                $statistic = Statistic::where('user_id', $currentUserId)
+                    ->where('year', $year)
+                    ->where('month', $month)
+                    ->first();
+
+                if ($statistic) {
+                    if ($statistic->total_income === $previousIncome) {
+                        $statistic->fill([
+                            'total_income' => $totalIncome,
+                        ]);
+                        $statistic->save();
+
+                        broadcast(new StatisticUpdated($statistic));
+                    } else {
+                        break;
+                    }
+                } else {
+                    $statistic = new Statistic([
+                        'user_id' => $currentUserId,
+                        'year' => $year,
+                        'month' => $month,
+                        'personality' => '',
+                        'total_transaction' => 0,
+                        'total_installment' => 0,
                         'total_income' => $totalIncome,
+                        'ratio' => 0,
                     ]);
                     $statistic->save();
 
-                    broadcast(new StatisticUpdated($statistic));
-                } else {
-                    break;
+                    broadcast(new StatisticCreated($statistic));
                 }
-            } else {
-                $statistic = new Statistic([
-                    'user_id' => $currentUserId,
-                    'year' => $year,
-                    'month' => $month,
-                    'personality' => '',
-                    'total_transaction' => 0,
-                    'total_installment' => 0,
-                    'total_income' => $totalIncome,
-                    'ratio' => 0,
-                ]);
-                $statistic->save();
 
-                broadcast(new StatisticCreated($statistic));
-            }
-
-            $month++;
-            if ($month > 12) {
-                $month = 1;
-                $year++;
+                $month++;
+                if ($month > 12) {
+                    $month = 1;
+                    $year++;
+                }
             }
         }
     }

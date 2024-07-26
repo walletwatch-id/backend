@@ -29,59 +29,65 @@ class GetPersonality implements ShouldQueue
      */
     public function handle(MachineLearningFacade $machineLearningFacade): void
     {
-        $surveyAnswer = $this->surveyResult->surveyResultAnswers()
+        $surveyQuestionsCount = $this->surveyResult->survey()->withCount('surveyQuestions')
+            ->get();
+
+        $surveyAnswers = $this->surveyResult->surveyResultAnswers()
             ->orderBy('question_id', 'asc')
             ->get()
             ->toArray();
 
-        $features = [];
-        for ($i = 1; $i <= 36; $i++) {
-            $features['f'.str_pad($i, 2, '0', STR_PAD_LEFT)] = (int) $surveyAnswer[$i]['answer'];
-        }
-
-        $personality = $machineLearningFacade->getPersonality($features);
-
-        $currentYear = Carbon::now()->format('Y');
-        $currentMonth = Carbon::now()->format('m');
-        $currentUserId = $this->surveyResult->user_id;
-
-        $year = $this->surveyResult->date->format('Y');
-        $month = $this->surveyResult->date->format('m');
-
-        while ($month <= $currentMonth && $year <= $currentYear) {
-            $statistic = Statistic::where('user_id', $currentUserId)
-                ->where('year', $year)
-                ->where('month', $month)
-                ->first();
-
-            if ($statistic) {
-                $statistic->fill([
-                    'personality' => $personality,
-                ]);
-                $statistic->save();
-
-                broadcast(new StatisticUpdated($statistic));
-            } else {
-                $statistic = new Statistic([
-                    'user_id' => $currentUserId,
-                    'year' => $year,
-                    'month' => $month,
-                    'personality' => $personality,
-                    'total_transaction' => 0,
-                    'total_installment' => 0,
-                    'total_income' => 0,
-                    'ratio' => 0,
-                ]);
-                $statistic->save();
-
-                broadcast(new StatisticCreated($statistic));
+        if (count($surveyAnswers) === $surveyQuestionsCount) {
+            $features = [];
+            for ($i = 1; $i <= 36; $i++) {
+                $features['f'.str_pad($i, 2, '0', STR_PAD_LEFT)] = (int) $surveyAnswers[$i]['answer'];
             }
 
-            $month++;
-            if ($month > 12) {
-                $month = 1;
-                $year++;
+            $personality = $machineLearningFacade->getPersonality($features);
+
+            $currentYear = Carbon::now()->format('Y');
+            $currentMonth = Carbon::now()->format('m');
+            $currentUserId = $this->surveyResult->user_id;
+
+            $year = $this->surveyResult->date->format('Y');
+            $month = $this->surveyResult->date->format('m');
+
+            while ($month <= $currentMonth && $year <= $currentYear) {
+                $statistic = Statistic::where('user_id', $currentUserId)
+                    ->where('year', $year)
+                    ->where('month', $month)
+                    ->first();
+
+                if ($statistic) {
+                    $statistic->fill([
+                        'personality' => $personality,
+                    ]);
+                    $statistic->save();
+
+                    broadcast(new StatisticUpdated($statistic));
+                } else {
+                    $statistic = new Statistic([
+                        'user_id' => $currentUserId,
+                        'year' => $year,
+                        'month' => $month,
+                        'personality' => $personality,
+                        'total_transaction' => 0,
+                        'total_installment' => 0,
+                        'total_income' => 0,
+                        'ratio' => 0,
+                    ]);
+                    $statistic->save();
+
+                    broadcast(new StatisticCreated($statistic));
+                }
+
+                $month++;
+                if ($month > 12) {
+                    $month = 1;
+                    $year++;
+                }
             }
         }
+
     }
 }
