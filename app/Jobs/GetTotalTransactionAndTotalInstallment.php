@@ -13,7 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
 
-class UpdateTotalTransactionAndTotalInstallment implements ShouldQueue
+class GetTotalTransactionAndTotalInstallment implements ShouldQueue
 {
     use Dispatchable, Queueable, SerializesModels;
 

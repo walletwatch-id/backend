@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Transaction\StoreTransactionRequest;
 use App\Http\Requests\Transaction\UpdateTransactionRequest;
+use App\Listeners\GetTotalTransactionAndTotalInstallment;
 use App\Models\Transaction;
 use App\Utils\ResponseFormatter;
 use Illuminate\Http\JsonResponse;
@@ -70,6 +71,8 @@ class TransactionController extends Controller
 
         $transaction->save();
 
+        dispatch(new GetTotalTransactionAndTotalInstallment($transaction));
+
         return ResponseFormatter::singleton('transaction', $transaction, 201);
     }
 
@@ -95,6 +98,8 @@ class TransactionController extends Controller
     {
         $transaction->fill($request->validated());
         $transaction->save();
+
+        dispatch(new GetTotalTransactionAndTotalInstallment($transaction));
 
         return ResponseFormatter::singleton('transaction', $transaction);
     }
