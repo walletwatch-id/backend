@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Jobs;
 
 use App\Events\StatisticUpdated;
 use App\Models\Statistic;
