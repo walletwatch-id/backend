@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\SurveyResultAnswer;
 
+use App\Models\SurveyResultAnswer;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateSurveyResultAnswerRequest extends FormRequest
 {
@@ -13,8 +16,16 @@ class UpdateSurveyResultAnswerRequest extends FormRequest
      */
     public function rules(): array
     {
+        $surveyId = SurveyResultAnswer::find($this->route('survey_result_answer'))->surveyResult->survey_id;
+
         return [
-            'question_id' => ['sometimes', 'uuid', 'exists:survey_questions,id'],
+            'question_id' => [
+                'sometimes',
+                'uuid',
+                Rule::exists('survey_questions', 'id')->where(function (Builder $query) use ($surveyId) {
+                    $query->where('survey_id', $surveyId);
+                }),
+            ],
             'answer' => ['sometimes', 'string'],
         ];
     }

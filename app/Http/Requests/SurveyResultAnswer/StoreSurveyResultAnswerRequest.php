@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\SurveyResultAnswer;
 
+use App\Models\SurveyResult;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreSurveyResultAnswerRequest extends FormRequest
 {
@@ -13,14 +16,28 @@ class StoreSurveyResultAnswerRequest extends FormRequest
      */
     public function rules(): array
     {
+        $surveyId = SurveyResult::find($this->route('survey_result'))->survey_id;
+
         if (is_array($this->all())) {
             return [
-                '*.question_id' => ['required', 'uuid', 'exists:survey_questions,id'],
+                '*.question_id' => [
+                    'required',
+                    'uuid',
+                    Rule::exists('survey_questions', 'id')->where(function (Builder $query) use ($surveyId) {
+                        $query->where('survey_id', $surveyId);
+                    }),
+                ],
                 '*.answer' => ['required', 'string'],
             ];
         } else {
             return [
-                'question_id' => ['required', 'uuid', 'exists:survey_questions,id'],
+                'question_id' => [
+                    'required',
+                    'uuid',
+                    Rule::exists('survey_questions', 'id')->where(function (Builder $query) use ($surveyId) {
+                        $query->where('survey_id', $surveyId);
+                    }),
+                ],
                 'answer' => ['required', 'string'],
             ];
         }

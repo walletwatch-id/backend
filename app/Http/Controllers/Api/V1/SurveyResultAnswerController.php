@@ -57,12 +57,6 @@ class SurveyResultAnswerController extends Controller
             $timestamp = Carbon::now();
 
             foreach ($data as $datum) {
-                if (! $surveyResult->survey->surveyQuestions()->where('id', $datum['question_id'])->exists()) {
-                    throw ValidationException::withMessages([
-                        'question_id' => ['Question does not exist.'],
-                    ]);
-                }
-
                 $surveyResultAnswers[] = array_merge($datum, [
                     'id' => Uuid::v7(),
                     'result_id' => $surveyResult->id,
@@ -75,12 +69,6 @@ class SurveyResultAnswerController extends Controller
 
             return ResponseFormatter::unpaginatedCollection('survey_result_answers', $surveyResultAnswers, 201);
         } else {
-            if (! $surveyResult->survey->surveyQuestions()->where('id', $data['question_id'])->exists()) {
-                throw ValidationException::withMessages([
-                    'question_id' => ['Question does not exist.'],
-                ]);
-            }
-
             $surveyResultAnswer = new SurveyResultAnswer($data);
             $surveyResultAnswer->fill([
                 'result_id' => $surveyResult->id,
@@ -112,12 +100,6 @@ class SurveyResultAnswerController extends Controller
      */
     public function update(UpdateSurveyResultAnswerRequest $request, SurveyResultAnswer $surveyResultAnswer): JsonResponse
     {
-        if (! $surveyResultAnswer->surveyResult->survey->surveyQuestions()->where('id', $request->question_id)->exists()) {
-            throw ValidationException::withMessages([
-                'question_id' => ['Question does not exist.'],
-            ]);
-        }
-
         $surveyResultAnswer->fill($request->validated());
         $surveyResultAnswer->save();
 
