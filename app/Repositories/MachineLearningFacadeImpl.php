@@ -57,7 +57,7 @@ class MachineLearningFacadeImpl implements MachineLearningFacade
         return $result->output;
     }
 
-    public function getLimit($features): int
+    public function getLimit($features): float
     {
         $result = Http::runpod()
             ->post('/runsync', [
