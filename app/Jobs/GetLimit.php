@@ -47,7 +47,7 @@ class GetLimit implements ShouldQueue
                 ->where('month', $month)
                 ->first();
 
-            if ($statistic) {
+            if ($statistic && $statistic->personality && $statistic->total_income) {
                 $ratio = $machineLearningFacade->getLimit([
                     'total_income' => $statistic->total_income,
                     'total_installment' => $statistic->total_installment,
