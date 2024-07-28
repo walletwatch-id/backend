@@ -56,7 +56,7 @@ class SurveyAnswerController extends Controller
 
         $surveyType = $surveyResult->survey->type;
 
-        if (is_array($data)) {
+        if (array_is_list($data)) {
             $surveyAnswers = [];
             $timestamp = Carbon::now();
 

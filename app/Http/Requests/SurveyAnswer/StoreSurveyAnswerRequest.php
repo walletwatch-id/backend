@@ -17,7 +17,7 @@ class StoreSurveyAnswerRequest extends FormRequest
     {
         $surveyId = $this->route('survey_result')->survey_id;
 
-        if (is_array($this->all())) {
+        if (array_is_list($this->all())) {
             return [
                 '*.question_id' => [
                     'required',
