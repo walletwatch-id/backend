@@ -9,18 +9,18 @@ class JsendFormatter
     /**
      * @param  string  $message  Error message
      * @param  string  $code  Optional custom error code
-     * @param  string | array  $data  Optional data
+     * @param  array  $data  Optional data
      * @param  int  $status  HTTP status code
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public static function error(string $message, ?string $code = null, $data = null, int $status = 500, array $extraHeaders = [])
+    public static function error(string $message, ?string $code = null, $data = [], int $status = 500, array $extraHeaders = [])
     {
         $response = [
             'status' => 'error',
             'message' => $message,
         ];
         ! is_null($code) && $response['code'] = $code;
-        ! is_null($data) && $response['data'] = $data;
+        $response['data'] = array_merge(['message' => $message], $data);
 
         return response()->json($response, $status, $extraHeaders);
     }
@@ -40,7 +40,7 @@ class JsendFormatter
     }
 
     /**
-     * @param  array | Illuminate\Database\Eloquent\Model  $data
+     * @param  array  $data
      * @param  int  $status  HTTP status code
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
