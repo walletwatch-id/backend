@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\SurveyAnswer;
 
-use App\Models\SurveyResult;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -16,7 +15,7 @@ class StoreSurveyAnswerRequest extends FormRequest
      */
     public function rules(): array
     {
-        $surveyId = SurveyResult::find($this->route('survey_result'))->survey_id;
+        $surveyId = $this->route('survey_result')->survey_id;
 
         if (is_array($this->all())) {
             return [
