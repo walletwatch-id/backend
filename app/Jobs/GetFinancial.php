@@ -13,7 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
 
-class GetTotalIncome implements ShouldBeUniqueUntilProcessing, ShouldQueue
+class GetFinancial implements ShouldBeUniqueUntilProcessing, ShouldQueue
 {
     use Dispatchable, Queueable, SerializesModels;
 

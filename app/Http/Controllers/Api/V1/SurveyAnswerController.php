@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SurveyAnswer\StoreSurveyAnswerRequest;
 use App\Http\Requests\SurveyAnswer\UpdateSurveyAnswerRequest;
+use App\Jobs\GetFinancial;
+use App\Jobs\GetPersonality;
 use App\Models\SurveyAnswer;
 use App\Models\SurveyResult;
 use App\Utils\ResponseFormatter;
@@ -51,6 +53,9 @@ class SurveyAnswerController extends Controller
     public function store(StoreSurveyAnswerRequest $request, SurveyResult $surveyResult): JsonResponse
     {
         $data = $request->validated();
+
+        $surveyType = $surveyResult->survey->type;
+
         if (is_array($data)) {
             $surveyAnswers = [];
             $timestamp = Carbon::now();
@@ -66,6 +71,12 @@ class SurveyAnswerController extends Controller
 
             SurveyAnswer::insert($surveyAnswers);
 
+            if ($surveyType === 'PERSONALITY') {
+                dispatch(new GetPersonality($surveyResult));
+            } elseif ($surveyType === 'FINANCIAL') {
+                dispatch(new GetFinancial($surveyResult));
+            }
+
             return ResponseFormatter::unpaginatedCollection('survey_answers', $surveyAnswers, 201);
         } else {
             $surveyAnswer = new SurveyAnswer($data);
@@ -74,6 +85,12 @@ class SurveyAnswerController extends Controller
             ]);
 
             $surveyAnswer->save();
+
+            if ($surveyType === 'PERSONALITY') {
+                dispatch(new GetPersonality($surveyResult));
+            } elseif ($surveyType === 'FINANCIAL') {
+                dispatch(new GetFinancial($surveyResult));
+            }
 
             return ResponseFormatter::singleton('survey_answer', $surveyAnswer, 201);
         }
@@ -101,6 +118,15 @@ class SurveyAnswerController extends Controller
     {
         $surveyAnswer->fill($request->validated());
         $surveyAnswer->save();
+
+        $surveyResult = $surveyAnswer->surveyResult;
+        $surveyType = $surveyResult->survey->type;
+
+        if ($surveyType === 'PERSONALITY') {
+            dispatch(new GetPersonality($surveyResult));
+        } elseif ($surveyType === 'FINANCIAL') {
+            dispatch(new GetFinancial($surveyResult));
+        }
 
         return ResponseFormatter::singleton('survey_answer', $surveyAnswer);
     }
