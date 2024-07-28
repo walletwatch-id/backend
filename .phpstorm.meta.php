@@ -13,6 +13,10 @@ namespace PHPSTORM_META {
     */
     override(new \Illuminate\Contracts\Container\Container, map([
         '' => '@',
+            'App\Repositories\AssistantFacade' => \App\Repositories\AssistantFacadeImpl::class,
+            'App\Repositories\MachineLearningFacade' => \App\Repositories\MachineLearningFacadeImpl::class,
+            'App\Repositories\StorageFacade' => \App\Repositories\StorageFacadeImpl::class,
+            'App\Repositories\TransactionRepository' => \App\Repositories\TransactionRepositoryImpl::class,
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
             'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -119,6 +123,8 @@ namespace PHPSTORM_META {
             'Illuminate\Foundation\Console\ViewCacheCommand' => \Illuminate\Foundation\Console\ViewCacheCommand::class,
             'Illuminate\Foundation\Console\ViewClearCommand' => \Illuminate\Foundation\Console\ViewClearCommand::class,
             'Illuminate\Foundation\Console\ViewMakeCommand' => \Illuminate\Foundation\Console\ViewMakeCommand::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Listener' => \Illuminate\Foundation\Exceptions\Renderer\Listener::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Renderer' => \Illuminate\Foundation\Exceptions\Renderer\Renderer::class,
             'Illuminate\Foundation\MaintenanceModeManager' => \Illuminate\Foundation\MaintenanceModeManager::class,
             'Illuminate\Foundation\Mix' => \Illuminate\Foundation\Mix::class,
             'Illuminate\Foundation\PackageManifest' => \Illuminate\Foundation\PackageManifest::class,
@@ -268,6 +274,10 @@ namespace PHPSTORM_META {
         ]));
     override(\Illuminate\Container\Container::makeWith(0), map([
         '' => '@',
+            'App\Repositories\AssistantFacade' => \App\Repositories\AssistantFacadeImpl::class,
+            'App\Repositories\MachineLearningFacade' => \App\Repositories\MachineLearningFacadeImpl::class,
+            'App\Repositories\StorageFacade' => \App\Repositories\StorageFacadeImpl::class,
+            'App\Repositories\TransactionRepository' => \App\Repositories\TransactionRepositoryImpl::class,
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
             'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -374,6 +384,8 @@ namespace PHPSTORM_META {
             'Illuminate\Foundation\Console\ViewCacheCommand' => \Illuminate\Foundation\Console\ViewCacheCommand::class,
             'Illuminate\Foundation\Console\ViewClearCommand' => \Illuminate\Foundation\Console\ViewClearCommand::class,
             'Illuminate\Foundation\Console\ViewMakeCommand' => \Illuminate\Foundation\Console\ViewMakeCommand::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Listener' => \Illuminate\Foundation\Exceptions\Renderer\Listener::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Renderer' => \Illuminate\Foundation\Exceptions\Renderer\Renderer::class,
             'Illuminate\Foundation\MaintenanceModeManager' => \Illuminate\Foundation\MaintenanceModeManager::class,
             'Illuminate\Foundation\Mix' => \Illuminate\Foundation\Mix::class,
             'Illuminate\Foundation\PackageManifest' => \Illuminate\Foundation\PackageManifest::class,
@@ -523,6 +535,10 @@ namespace PHPSTORM_META {
         ]));
     override(\Illuminate\Contracts\Container\Container::get(0), map([
         '' => '@',
+            'App\Repositories\AssistantFacade' => \App\Repositories\AssistantFacadeImpl::class,
+            'App\Repositories\MachineLearningFacade' => \App\Repositories\MachineLearningFacadeImpl::class,
+            'App\Repositories\StorageFacade' => \App\Repositories\StorageFacadeImpl::class,
+            'App\Repositories\TransactionRepository' => \App\Repositories\TransactionRepositoryImpl::class,
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
             'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -629,6 +645,8 @@ namespace PHPSTORM_META {
             'Illuminate\Foundation\Console\ViewCacheCommand' => \Illuminate\Foundation\Console\ViewCacheCommand::class,
             'Illuminate\Foundation\Console\ViewClearCommand' => \Illuminate\Foundation\Console\ViewClearCommand::class,
             'Illuminate\Foundation\Console\ViewMakeCommand' => \Illuminate\Foundation\Console\ViewMakeCommand::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Listener' => \Illuminate\Foundation\Exceptions\Renderer\Listener::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Renderer' => \Illuminate\Foundation\Exceptions\Renderer\Renderer::class,
             'Illuminate\Foundation\MaintenanceModeManager' => \Illuminate\Foundation\MaintenanceModeManager::class,
             'Illuminate\Foundation\Mix' => \Illuminate\Foundation\Mix::class,
             'Illuminate\Foundation\PackageManifest' => \Illuminate\Foundation\PackageManifest::class,
@@ -778,6 +796,10 @@ namespace PHPSTORM_META {
         ]));
     override(\Illuminate\Contracts\Container\Container::make(0), map([
         '' => '@',
+            'App\Repositories\AssistantFacade' => \App\Repositories\AssistantFacadeImpl::class,
+            'App\Repositories\MachineLearningFacade' => \App\Repositories\MachineLearningFacadeImpl::class,
+            'App\Repositories\StorageFacade' => \App\Repositories\StorageFacadeImpl::class,
+            'App\Repositories\TransactionRepository' => \App\Repositories\TransactionRepositoryImpl::class,
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
             'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -884,6 +906,8 @@ namespace PHPSTORM_META {
             'Illuminate\Foundation\Console\ViewCacheCommand' => \Illuminate\Foundation\Console\ViewCacheCommand::class,
             'Illuminate\Foundation\Console\ViewClearCommand' => \Illuminate\Foundation\Console\ViewClearCommand::class,
             'Illuminate\Foundation\Console\ViewMakeCommand' => \Illuminate\Foundation\Console\ViewMakeCommand::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Listener' => \Illuminate\Foundation\Exceptions\Renderer\Listener::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Renderer' => \Illuminate\Foundation\Exceptions\Renderer\Renderer::class,
             'Illuminate\Foundation\MaintenanceModeManager' => \Illuminate\Foundation\MaintenanceModeManager::class,
             'Illuminate\Foundation\Mix' => \Illuminate\Foundation\Mix::class,
             'Illuminate\Foundation\PackageManifest' => \Illuminate\Foundation\PackageManifest::class,
@@ -1033,6 +1057,10 @@ namespace PHPSTORM_META {
         ]));
     override(\Illuminate\Contracts\Container\Container::makeWith(0), map([
         '' => '@',
+            'App\Repositories\AssistantFacade' => \App\Repositories\AssistantFacadeImpl::class,
+            'App\Repositories\MachineLearningFacade' => \App\Repositories\MachineLearningFacadeImpl::class,
+            'App\Repositories\StorageFacade' => \App\Repositories\StorageFacadeImpl::class,
+            'App\Repositories\TransactionRepository' => \App\Repositories\TransactionRepositoryImpl::class,
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
             'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -1139,6 +1167,8 @@ namespace PHPSTORM_META {
             'Illuminate\Foundation\Console\ViewCacheCommand' => \Illuminate\Foundation\Console\ViewCacheCommand::class,
             'Illuminate\Foundation\Console\ViewClearCommand' => \Illuminate\Foundation\Console\ViewClearCommand::class,
             'Illuminate\Foundation\Console\ViewMakeCommand' => \Illuminate\Foundation\Console\ViewMakeCommand::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Listener' => \Illuminate\Foundation\Exceptions\Renderer\Listener::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Renderer' => \Illuminate\Foundation\Exceptions\Renderer\Renderer::class,
             'Illuminate\Foundation\MaintenanceModeManager' => \Illuminate\Foundation\MaintenanceModeManager::class,
             'Illuminate\Foundation\Mix' => \Illuminate\Foundation\Mix::class,
             'Illuminate\Foundation\PackageManifest' => \Illuminate\Foundation\PackageManifest::class,
@@ -1288,6 +1318,10 @@ namespace PHPSTORM_META {
         ]));
     override(\App::get(0), map([
         '' => '@',
+            'App\Repositories\AssistantFacade' => \App\Repositories\AssistantFacadeImpl::class,
+            'App\Repositories\MachineLearningFacade' => \App\Repositories\MachineLearningFacadeImpl::class,
+            'App\Repositories\StorageFacade' => \App\Repositories\StorageFacadeImpl::class,
+            'App\Repositories\TransactionRepository' => \App\Repositories\TransactionRepositoryImpl::class,
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
             'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -1394,6 +1428,8 @@ namespace PHPSTORM_META {
             'Illuminate\Foundation\Console\ViewCacheCommand' => \Illuminate\Foundation\Console\ViewCacheCommand::class,
             'Illuminate\Foundation\Console\ViewClearCommand' => \Illuminate\Foundation\Console\ViewClearCommand::class,
             'Illuminate\Foundation\Console\ViewMakeCommand' => \Illuminate\Foundation\Console\ViewMakeCommand::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Listener' => \Illuminate\Foundation\Exceptions\Renderer\Listener::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Renderer' => \Illuminate\Foundation\Exceptions\Renderer\Renderer::class,
             'Illuminate\Foundation\MaintenanceModeManager' => \Illuminate\Foundation\MaintenanceModeManager::class,
             'Illuminate\Foundation\Mix' => \Illuminate\Foundation\Mix::class,
             'Illuminate\Foundation\PackageManifest' => \Illuminate\Foundation\PackageManifest::class,
@@ -1543,6 +1579,10 @@ namespace PHPSTORM_META {
         ]));
     override(\App::make(0), map([
         '' => '@',
+            'App\Repositories\AssistantFacade' => \App\Repositories\AssistantFacadeImpl::class,
+            'App\Repositories\MachineLearningFacade' => \App\Repositories\MachineLearningFacadeImpl::class,
+            'App\Repositories\StorageFacade' => \App\Repositories\StorageFacadeImpl::class,
+            'App\Repositories\TransactionRepository' => \App\Repositories\TransactionRepositoryImpl::class,
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
             'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -1649,6 +1689,8 @@ namespace PHPSTORM_META {
             'Illuminate\Foundation\Console\ViewCacheCommand' => \Illuminate\Foundation\Console\ViewCacheCommand::class,
             'Illuminate\Foundation\Console\ViewClearCommand' => \Illuminate\Foundation\Console\ViewClearCommand::class,
             'Illuminate\Foundation\Console\ViewMakeCommand' => \Illuminate\Foundation\Console\ViewMakeCommand::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Listener' => \Illuminate\Foundation\Exceptions\Renderer\Listener::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Renderer' => \Illuminate\Foundation\Exceptions\Renderer\Renderer::class,
             'Illuminate\Foundation\MaintenanceModeManager' => \Illuminate\Foundation\MaintenanceModeManager::class,
             'Illuminate\Foundation\Mix' => \Illuminate\Foundation\Mix::class,
             'Illuminate\Foundation\PackageManifest' => \Illuminate\Foundation\PackageManifest::class,
@@ -1798,6 +1840,10 @@ namespace PHPSTORM_META {
         ]));
     override(\App::makeWith(0), map([
         '' => '@',
+            'App\Repositories\AssistantFacade' => \App\Repositories\AssistantFacadeImpl::class,
+            'App\Repositories\MachineLearningFacade' => \App\Repositories\MachineLearningFacadeImpl::class,
+            'App\Repositories\StorageFacade' => \App\Repositories\StorageFacadeImpl::class,
+            'App\Repositories\TransactionRepository' => \App\Repositories\TransactionRepositoryImpl::class,
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
             'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -1904,6 +1950,8 @@ namespace PHPSTORM_META {
             'Illuminate\Foundation\Console\ViewCacheCommand' => \Illuminate\Foundation\Console\ViewCacheCommand::class,
             'Illuminate\Foundation\Console\ViewClearCommand' => \Illuminate\Foundation\Console\ViewClearCommand::class,
             'Illuminate\Foundation\Console\ViewMakeCommand' => \Illuminate\Foundation\Console\ViewMakeCommand::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Listener' => \Illuminate\Foundation\Exceptions\Renderer\Listener::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Renderer' => \Illuminate\Foundation\Exceptions\Renderer\Renderer::class,
             'Illuminate\Foundation\MaintenanceModeManager' => \Illuminate\Foundation\MaintenanceModeManager::class,
             'Illuminate\Foundation\Mix' => \Illuminate\Foundation\Mix::class,
             'Illuminate\Foundation\PackageManifest' => \Illuminate\Foundation\PackageManifest::class,
@@ -2053,6 +2101,10 @@ namespace PHPSTORM_META {
         ]));
     override(\app(0), map([
         '' => '@',
+            'App\Repositories\AssistantFacade' => \App\Repositories\AssistantFacadeImpl::class,
+            'App\Repositories\MachineLearningFacade' => \App\Repositories\MachineLearningFacadeImpl::class,
+            'App\Repositories\StorageFacade' => \App\Repositories\StorageFacadeImpl::class,
+            'App\Repositories\TransactionRepository' => \App\Repositories\TransactionRepositoryImpl::class,
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
             'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -2159,6 +2211,8 @@ namespace PHPSTORM_META {
             'Illuminate\Foundation\Console\ViewCacheCommand' => \Illuminate\Foundation\Console\ViewCacheCommand::class,
             'Illuminate\Foundation\Console\ViewClearCommand' => \Illuminate\Foundation\Console\ViewClearCommand::class,
             'Illuminate\Foundation\Console\ViewMakeCommand' => \Illuminate\Foundation\Console\ViewMakeCommand::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Listener' => \Illuminate\Foundation\Exceptions\Renderer\Listener::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Renderer' => \Illuminate\Foundation\Exceptions\Renderer\Renderer::class,
             'Illuminate\Foundation\MaintenanceModeManager' => \Illuminate\Foundation\MaintenanceModeManager::class,
             'Illuminate\Foundation\Mix' => \Illuminate\Foundation\Mix::class,
             'Illuminate\Foundation\PackageManifest' => \Illuminate\Foundation\PackageManifest::class,
@@ -2308,6 +2362,10 @@ namespace PHPSTORM_META {
         ]));
     override(\resolve(0), map([
         '' => '@',
+            'App\Repositories\AssistantFacade' => \App\Repositories\AssistantFacadeImpl::class,
+            'App\Repositories\MachineLearningFacade' => \App\Repositories\MachineLearningFacadeImpl::class,
+            'App\Repositories\StorageFacade' => \App\Repositories\StorageFacadeImpl::class,
+            'App\Repositories\TransactionRepository' => \App\Repositories\TransactionRepositoryImpl::class,
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
             'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -2414,6 +2472,8 @@ namespace PHPSTORM_META {
             'Illuminate\Foundation\Console\ViewCacheCommand' => \Illuminate\Foundation\Console\ViewCacheCommand::class,
             'Illuminate\Foundation\Console\ViewClearCommand' => \Illuminate\Foundation\Console\ViewClearCommand::class,
             'Illuminate\Foundation\Console\ViewMakeCommand' => \Illuminate\Foundation\Console\ViewMakeCommand::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Listener' => \Illuminate\Foundation\Exceptions\Renderer\Listener::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Renderer' => \Illuminate\Foundation\Exceptions\Renderer\Renderer::class,
             'Illuminate\Foundation\MaintenanceModeManager' => \Illuminate\Foundation\MaintenanceModeManager::class,
             'Illuminate\Foundation\Mix' => \Illuminate\Foundation\Mix::class,
             'Illuminate\Foundation\PackageManifest' => \Illuminate\Foundation\PackageManifest::class,
@@ -2563,6 +2623,10 @@ namespace PHPSTORM_META {
         ]));
     override(\Psr\Container\ContainerInterface::get(0), map([
         '' => '@',
+            'App\Repositories\AssistantFacade' => \App\Repositories\AssistantFacadeImpl::class,
+            'App\Repositories\MachineLearningFacade' => \App\Repositories\MachineLearningFacadeImpl::class,
+            'App\Repositories\StorageFacade' => \App\Repositories\StorageFacadeImpl::class,
+            'App\Repositories\TransactionRepository' => \App\Repositories\TransactionRepositoryImpl::class,
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
             'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -2669,6 +2733,8 @@ namespace PHPSTORM_META {
             'Illuminate\Foundation\Console\ViewCacheCommand' => \Illuminate\Foundation\Console\ViewCacheCommand::class,
             'Illuminate\Foundation\Console\ViewClearCommand' => \Illuminate\Foundation\Console\ViewClearCommand::class,
             'Illuminate\Foundation\Console\ViewMakeCommand' => \Illuminate\Foundation\Console\ViewMakeCommand::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Listener' => \Illuminate\Foundation\Exceptions\Renderer\Listener::class,
+            'Illuminate\Foundation\Exceptions\Renderer\Renderer' => \Illuminate\Foundation\Exceptions\Renderer\Renderer::class,
             'Illuminate\Foundation\MaintenanceModeManager' => \Illuminate\Foundation\MaintenanceModeManager::class,
             'Illuminate\Foundation\Mix' => \Illuminate\Foundation\Mix::class,
             'Illuminate\Foundation\PackageManifest' => \Illuminate\Foundation\PackageManifest::class,
