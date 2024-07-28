@@ -38,10 +38,14 @@ class GetPersonality implements ShouldBeUniqueUntilProcessing, ShouldQueue
      */
     public function handle(MachineLearningFacade $machineLearningFacade): void
     {
-        $surveyQuestionsCount = $this->surveyResult->survey()->withCount('surveyQuestions')
-            ->get();
+        $surveyQuestionsCount = $this->surveyResult
+            ->survey()
+            ->withCount('surveyQuestions')
+            ->first()
+            ->survey_questions_count;
 
-        $surveyAnswers = $this->surveyResult->surveyAnswers()
+        $surveyAnswers = $this->surveyResult
+            ->surveyAnswers()
             ->orderBy('question_id', 'asc')
             ->get()
             ->toArray();
