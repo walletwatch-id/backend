@@ -10,12 +10,11 @@ use App\Jobs\GetPersonality;
 use App\Models\SurveyAnswer;
 use App\Models\SurveyResult;
 use App\Utils\ResponseFormatter;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
-use Symfony\Component\Uid\Uuid;
 
 class SurveyAnswerController extends Controller
 {
@@ -58,18 +57,18 @@ class SurveyAnswerController extends Controller
 
         if (array_is_list($data)) {
             $surveyAnswers = [];
-            $timestamp = Carbon::now();
 
             foreach ($data as $datum) {
-                $surveyAnswers[] = array_merge($datum, [
-                    'id' => Uuid::v7(),
+                $surveyAnswer = new SurveyAnswer($datum);
+                $surveyAnswer->fill([
                     'result_id' => $surveyResult->id,
-                    'created_at' => $timestamp,
-                    'updated_at' => $timestamp,
                 ]);
+                $surveyAnswers[] = $surveyAnswer;
             }
 
-            SurveyAnswer::insert($surveyAnswers);
+            $surveyAnswers = Collection::make($surveyAnswers);
+
+            SurveyAnswer::bulkInsert($surveyAnswers);
 
             if ($surveyType === 'PERSONALITY') {
                 dispatch(new GetPersonality($surveyResult));

@@ -101,22 +101,22 @@ return Application::configure(basePath: dirname(__DIR__))
                     $e->getStatusCode(),
                     $e->getHeaders() ?: [],
                 );
+            } else {
+                return JsendFormatter::error(
+                    $e->getMessage(),
+                    $e->getCode() ?: null,
+                    config('app.debug') ? [
+                        'exception' => get_class($e),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine(),
+                        'trace' => collect($e->getTrace())->map(function ($trace) {
+                            return Arr::except($trace, ['args']);
+                        })->all(),
+                    ] : null,
+                    $e->getStatusCode() ?? 500,
+                    $e->getHeaders() ?: [],
+                );
             }
-
-            return JsendFormatter::error(
-                $e->getMessage(),
-                $e->getCode() ?: null,
-                config('app.debug') ? [
-                    'exception' => get_class($e),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'trace' => collect($e->getTrace())->map(function ($trace) {
-                        return Arr::except($trace, ['args']);
-                    })->all(),
-                ] : null,
-                $e->getStatusCode() ?? 500,
-                $e->getHeaders() ?: [],
-            );
         });
 
         $exceptions->render(function (Throwable $e) {
