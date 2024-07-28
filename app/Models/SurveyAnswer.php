@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SurveyResultAnswer extends Model
+class SurveyAnswer extends Model
 {
     use HasFactory, HasUuids;
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\SurveyResultAnswer;
+namespace App\Http\Requests\SurveyAnswer;
 
-use App\Models\SurveyResultAnswer;
+use App\Models\SurveyAnswer;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateSurveyResultAnswerRequest extends FormRequest
+class UpdateSurveyAnswerRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -16,7 +16,7 @@ class UpdateSurveyResultAnswerRequest extends FormRequest
      */
     public function rules(): array
     {
-        $surveyId = SurveyResultAnswer::find($this->route('survey_result_answer'))->surveyResult->survey_id;
+        $surveyId = SurveyAnswer::find($this->route('survey_answer'))->surveyResult->survey_id;
 
         return [
             'question_id' => [

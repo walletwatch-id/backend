@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\SurveyResultAnswer;
+namespace App\Http\Requests\SurveyAnswer;
 
 use App\Models\SurveyResult;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreSurveyResultAnswerRequest extends FormRequest
+class StoreSurveyAnswerRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

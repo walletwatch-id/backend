@@ -149,7 +149,7 @@ Route::group([
                 ->only(['index', 'store']);
             Route::apiResource('survey-results', 'SurveyResultController')
                 ->only(['show', 'update', 'destroy']);
-            Route::apiResource('survey-results.survey-result-answers', 'SurveyResultAnswerController')
+            Route::apiResource('survey-results.survey-answers', 'SurveyAnswerController')
                 ->shallow();
             Route::apiResource('statistics', 'StatisticController')
                 ->only(['index', 'show']);

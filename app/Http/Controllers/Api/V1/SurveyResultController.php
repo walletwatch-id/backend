@@ -29,7 +29,7 @@ class SurveyResultController extends Controller
             ->allowedIncludes([
                 'user',
                 'survey',
-                AllowedInclude::relationship('answer', 'surveyResultAnswers'),
+                AllowedInclude::relationship('answer', 'surveyAnswers'),
             ]);
 
         if ($request->user()->role === 'ADMIN') {
@@ -92,7 +92,7 @@ class SurveyResultController extends Controller
             ->allowedIncludes([
                 'user',
                 'survey',
-                AllowedInclude::relationship('answer', 'surveyResultAnswers'),
+                AllowedInclude::relationship('answer', 'surveyAnswers'),
             ])
             ->firstOrFail();
 

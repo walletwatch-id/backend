@@ -41,7 +41,7 @@ class GetPersonality implements ShouldBeUniqueUntilProcessing, ShouldQueue
         $surveyQuestionsCount = $this->surveyResult->survey()->withCount('surveyQuestions')
             ->get();
 
-        $surveyAnswers = $this->surveyResult->surveyResultAnswers()
+        $surveyAnswers = $this->surveyResult->surveyAnswers()
             ->orderBy('question_id', 'asc')
             ->get()
             ->toArray();

@@ -32,9 +32,9 @@ class SurveyQuestion extends Model
         return $date->format(DATE_ATOM);
     }
 
-    public function surveyResultAnswers(): HasMany
+    public function surveyAnswers(): HasMany
     {
-        return $this->hasMany(SurveyResultAnswer::class, 'question_id');
+        return $this->hasMany(SurveyAnswer::class, 'question_id');
     }
 
     public function survey(): BelongsTo

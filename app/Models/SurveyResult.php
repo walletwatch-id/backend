@@ -44,9 +44,9 @@ class SurveyResult extends Model
         return $date->format(DATE_ATOM);
     }
 
-    public function surveyResultAnswers(): HasMany
+    public function surveyAnswers(): HasMany
     {
-        return $this->hasMany(SurveyResultAnswer::class, 'result_id');
+        return $this->hasMany(SurveyAnswer::class, 'result_id');
     }
 
     public function user(): BelongsTo
