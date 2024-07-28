@@ -52,7 +52,7 @@ class GetLimit implements ShouldQueue
                     'total_income' => $statistic->total_income,
                     'total_installment' => $statistic->total_installment,
                     'personality' => $statistic->personality,
-                    'last_month_limit', $previousStatistic->ratio ?? 0.15,
+                    'last_month_limit' => $previousStatistic->ratio ?? 0.15,
                 ]);
 
                 $statistic->fill([
