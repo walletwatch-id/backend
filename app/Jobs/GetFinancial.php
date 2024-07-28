@@ -100,6 +100,8 @@ class GetFinancial implements ShouldBeUniqueUntilProcessing, ShouldQueue
                     $year++;
                 }
             }
+
+            dispatch(new GetLimit($currentUserId, $this->surveyResult->date));
         }
     }
 }

@@ -79,5 +79,7 @@ class GetTotalTransactionAndTotalInstallment implements ShouldQueue
                 $year++;
             }
         }
+
+        dispatch(new GetLimit($currentUserId, $this->transaction->transaction_datetime));
     }
 }
