@@ -52,9 +52,10 @@ class MachineLearningFacadeImpl implements MachineLearningFacade
                     ],
                 ],
             ])
-            ->object();
+            ->throw()
+            ->json();
 
-        return $result->output;
+        return $result['output'];
     }
 
     public function getLimit($features): float
@@ -71,8 +72,9 @@ class MachineLearningFacadeImpl implements MachineLearningFacade
                     ],
                 ],
             ])
-            ->object();
+            ->throw()
+            ->json();
 
-        return $result->output;
+        return $result['output'];
     }
 }
