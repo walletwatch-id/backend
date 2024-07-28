@@ -62,7 +62,7 @@ class MachineLearningFacadeImpl implements MachineLearningFacade
         $result = Http::runpod()
             ->post('/runsync', [
                 'input' => [
-                    'model' => 'limit',
+                    'model_id' => 'limit',
                     'features' => [
                         'total_income' => $features['total_income'],
                         'total_installment' => $features['total_installment'],
