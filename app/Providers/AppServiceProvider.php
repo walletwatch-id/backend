@@ -61,7 +61,7 @@ class AppServiceProvider extends ServiceProvider
             ));
             $paths = explode('/', $url['path']);
 
-            return $url['scheme'].'://'.$url['host'].($url['port'] ? ':'.$url['port'] : null).'/'.$paths[2].'?id='.$paths[3].'&hash='.$paths[4].'&'.$url['query'];
+            return $url['scheme'].'://'.$url['host'].(isset($array['port']) ? ':'.$url['port'] : null).'/'.$paths[2].'?id='.$paths[3].'&hash='.$paths[4].'&'.$url['query'];
         });
         Passport::useClientModel(Client::class);
         Passport::usePersonalAccessClientModel(PersonalAccessClient::class);
