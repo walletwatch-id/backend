@@ -42,7 +42,7 @@ class InstanceHotlineController extends Controller
             ->whereIn('id', $instanceHotlines)
             ->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('hotlines', $hotlines);
+        return ResponseFormatter::paginatedCollection('hotlines', $hotlines);
     }
 
     /**

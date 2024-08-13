@@ -43,7 +43,7 @@ class SurveyAnswerController extends Controller
             ->where('result_id', $surveyResult->id)
             ->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('survey_answers', $surveyAnswers);
+        return ResponseFormatter::paginatedCollection('survey_answers', $surveyAnswers);
     }
 
     /**
@@ -76,7 +76,7 @@ class SurveyAnswerController extends Controller
                 dispatch(new GetFinancial($surveyResult));
             }
 
-            return ResponseFormatter::unpaginatedCollection('survey_answers', $surveyAnswers, 201);
+            return ResponseFormatter::collection('survey_answers', $surveyAnswers, 201);
         } else {
             $surveyAnswer = new SurveyAnswer($data);
             $surveyAnswer->fill([

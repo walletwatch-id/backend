@@ -39,7 +39,7 @@ class PaylaterController extends Controller
             ])
             ->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('paylaters', $paylaters);
+        return ResponseFormatter::paginatedCollection('paylaters', $paylaters);
     }
 
     /**

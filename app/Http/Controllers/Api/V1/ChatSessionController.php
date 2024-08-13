@@ -53,7 +53,7 @@ class ChatSessionController extends Controller
 
         $chatSessions = $chatSessions->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('chat_sessions', $chatSessions);
+        return ResponseFormatter::paginatedCollection('chat_sessions', $chatSessions);
     }
 
     /**

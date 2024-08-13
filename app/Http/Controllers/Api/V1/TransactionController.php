@@ -53,7 +53,7 @@ class TransactionController extends Controller
 
         $transactions = $transactions->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('transactions', $transactions);
+        return ResponseFormatter::paginatedCollection('transactions', $transactions);
     }
 
     /**

@@ -42,7 +42,7 @@ class PaylaterHotlineController extends Controller
             ->whereIn('id', $paylaterHotlines)
             ->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('hotlines', $hotlines);
+        return ResponseFormatter::paginatedCollection('hotlines', $hotlines);
     }
 
     /**

@@ -49,7 +49,7 @@ class UserController extends Controller
             ])
             ->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('users', $users);
+        return ResponseFormatter::paginatedCollection('users', $users);
     }
 
     /**

@@ -49,7 +49,7 @@ class PersonalitySurveyController extends Controller
 
         $personalitySurveys = $personalitySurveys->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('personality_surveys', $personalitySurveys);
+        return ResponseFormatter::paginatedCollection('personality_surveys', $personalitySurveys);
     }
 
     /**

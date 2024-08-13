@@ -39,7 +39,7 @@ class InstanceController extends Controller
             ])
             ->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('instances', $instances);
+        return ResponseFormatter::paginatedCollection('instances', $instances);
     }
 
     /**

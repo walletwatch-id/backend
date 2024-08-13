@@ -49,7 +49,7 @@ class FinancialSurveyController extends Controller
 
         $financialSurveys = $financialSurveys->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('financial_surveys', $financialSurveys);
+        return ResponseFormatter::paginatedCollection('financial_surveys', $financialSurveys);
     }
 
     /**

@@ -42,7 +42,7 @@ class ChatMessageController extends Controller
             ->where('session_id', $chatSession->id)
             ->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('chat_messages', $chatMessages);
+        return ResponseFormatter::paginatedCollection('chat_messages', $chatMessages);
     }
 
     /**

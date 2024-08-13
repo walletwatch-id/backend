@@ -38,7 +38,7 @@ class SurveyQuestionController extends Controller
             ->where('survey_id', $survey->id)
             ->paginate($request->query('per_page', 10));
 
-        return ResponseFormatter::collection('survey_questions', $surveyQuestions);
+        return ResponseFormatter::paginatedCollection('survey_questions', $surveyQuestions);
     }
 
     /**
