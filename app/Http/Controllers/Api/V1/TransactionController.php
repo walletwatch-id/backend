@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Transaction\StoreTransactionRequest;
 use App\Http\Requests\Transaction\UpdateTransactionRequest;
-use App\Listeners\GetTotalTransactionAndTotalInstallment;
+use App\Jobs\GetTotalTransactionAndTotalInstallment;
 use App\Models\Transaction;
 use App\Utils\ResponseFormatter;
 use Illuminate\Http\JsonResponse;
