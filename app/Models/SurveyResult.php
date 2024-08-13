@@ -25,16 +25,13 @@ class SurveyResult extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array
      */
-    protected function casts(): array
-    {
-        return [
-            'date' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'date' => 'datetime',
+    ];
 
     /**
      * Prepare a date for array / JSON serialization.

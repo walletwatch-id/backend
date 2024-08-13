@@ -27,17 +27,14 @@ class Transaction extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array
      */
-    protected function casts(): array
-    {
-        return [
-            'first_installment_datetime' => 'datetime',
-            'transaction_datetime' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'first_installment_datetime' => 'datetime',
+        'transaction_datetime' => 'datetime',
+    ];
 
     /**
      * Prepare a date for array / JSON serialization.
