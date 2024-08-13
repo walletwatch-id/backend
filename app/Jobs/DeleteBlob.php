@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Repositories\StorageFacade;
 use App\Utils\Encoder;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,7 +19,7 @@ class DeleteBlob implements ShouldBeUnique, ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public string $id,
+        public string $encodedManifest,
     ) {}
 
     /**
@@ -33,14 +34,20 @@ class DeleteBlob implements ShouldBeUnique, ShouldQueue
      */
     public function uniqueId(): string
     {
-        return $this->id;
+        return $this->encodedManifest;
     }
 
     /**
      * Execute the job.
+     *
+     * @throws Exception
      */
     public function handle(StorageFacade $storageFacade): void
     {
-        $storageFacade->delete(Encoder::base64UrlDecode($this->id));
+        if (Encoder::isBase64Url($this->encodedManifest)) {
+            $storageFacade->delete(Encoder::base64UrlDecode($this->encodedManifest));
+        } else {
+            throw new Exception('Invalid encoded manifest');
+        }
     }
 }

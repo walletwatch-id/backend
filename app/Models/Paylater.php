@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Blob;
 use App\Traits\HasUuids;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,15 @@ class Paylater extends Model
     protected $fillable = [
         'name',
         'logo',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'logo' => Blob::class,
     ];
 
     /**

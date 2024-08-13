@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Blob;
 use App\Traits\HasUuids;
 use DateTimeInterface;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -44,6 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'picture' => Blob::class,
     ];
 
     /**

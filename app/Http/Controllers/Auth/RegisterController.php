@@ -23,13 +23,15 @@ class RegisterController extends Controller
      */
     public function __invoke(RegisterRequest $request): JsonResponse
     {
-        if ($request->hasFile('picture')) {
+        $hasPicture = $request->hasFile('picture');
+
+        if ($hasPicture) {
             $id = $this->storageFacade->store($request->file('picture'), 'avatar');
             $encodedManifest = Encoder::base64UrlEncode($id);
         }
 
         $user = new User(
-            $request->hasFile('picture')
+            $hasPicture
             ? array_replace($request->validated(), ['picture' => $encodedManifest])
             : $request->validated()
         );

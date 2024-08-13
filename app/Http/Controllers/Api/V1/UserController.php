@@ -57,14 +57,15 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): JsonResponse
     {
-        if ($request->hasFile('picture')) {
+        $hasPicture = $request->hasFile('picture');
+
+        if ($hasPicture) {
             $manifest = $this->storageFacade->store($request->file('picture'), 'avatar');
-            $encodedManifest = Encoder::base64UrlEncode($manifest);
         }
 
         $user = new User(
-            $request->hasFile('picture')
-            ? array_replace($request->validated(), ['picture' => $encodedManifest])
+            $hasPicture
+            ? array_replace($request->validated(), ['picture' => $manifest])
             : $request->validated()
         );
         $user->forceFill([
@@ -98,25 +99,24 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
-        if ($request->has('picture')) {
-            $strings = explode('/', $user->picture);
-            $encodedManifest = end($strings);
+        $hasPicture = $request->has('picture');
+        $hasFilePicture = $request->hasFile('picture');
 
-            if (Encoder::isBase64Url($encodedManifest ?? '')) {
-                dispatch(new DeleteBlob($encodedManifest));
-            }
+        if ($hasPicture) {
+            $encodedManifest = $user->getRawOriginal('picture');
 
-            if ($request->hasFile('picture')) {
+            dispatch(new DeleteBlob($encodedManifest));
+
+            if ($hasFilePicture) {
                 $manifest = $this->storageFacade->store($request->file('picture'), 'avatar');
-                $encodedManifest = Encoder::base64UrlEncode($manifest);
             } else {
-                $encodedManifest = null;
+                $manifest = null;
             }
         }
 
         $user->fill(
-            $request->has('picture')
-            ? array_replace($request->validated(), ['picture' => $encodedManifest])
+            $hasPicture
+            ? array_replace($request->validated(), ['picture' => $manifest])
             : $request->validated()
         );
 
@@ -137,12 +137,9 @@ class UserController extends Controller
      */
     public function destroy(User $user): JsonResponse
     {
-        $strings = explode('/', $user->picture);
-        $encodedManifest = end($strings);
+        $encodedManifest = $user->getRawOriginal('picture');
 
-        if (Encoder::isBase64Url($encodedManifest ?? '')) {
-            dispatch(new DeleteBlob($encodedManifest));
-        }
+        dispatch(new DeleteBlob($encodedManifest));
 
         $user->delete();
 
