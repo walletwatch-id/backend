@@ -101,16 +101,20 @@ Route::group([
     'prefix' => 'api',
     'namespace' => 'App\Http\Controllers\Api',
 ], function () {
-    Route::get('/', 'CommonController@greet');
-    Route::get('/status', 'CommonController@checkHealth');
+    Route::get('/', 'CommonController@greet')
+        ->name('greet');
+    Route::get('/status', 'CommonController@checkHealth')
+        ->name('status');
 
     Route::group([
         'as' => 'v1.',
         'prefix' => 'v1',
         'namespace' => 'V1',
     ], function () {
-        Route::get('/', 'CommonController@greet');
-        Route::get('blobs/{blob}', 'BlobController');
+        Route::get('/', 'CommonController@greet')
+            ->name('greet');
+        Route::get('blobs/{blob}', 'BlobController')
+            ->name('blobs.show');
 
         Route::group(['middleware' => ['auth:api', 'verified']], function () {
             Route::apiResources([
