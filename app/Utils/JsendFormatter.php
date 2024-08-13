@@ -21,7 +21,7 @@ class JsendFormatter
             'message' => $message,
         ];
         ! is_null($code) && $response['code'] = $code;
-        $response['data'] = array_merge(['message' => $message], $data);
+        $response['data'] = array_merge(['message' => $message], $data ?? []);
 
         return response()->json($response, $status, $extraHeaders);
     }
