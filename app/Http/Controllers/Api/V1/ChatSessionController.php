@@ -94,8 +94,7 @@ class ChatSessionController extends Controller
      */
     public function update(UpdateChatSessionRequest $request, ChatSession $chatSession): JsonResponse
     {
-        $chatSession->fill($request->validated());
-        $chatSession->save();
+        $chatSession->update($request->validated());
 
         return ResponseFormatter::singleton('chat_session', $chatSession);
     }

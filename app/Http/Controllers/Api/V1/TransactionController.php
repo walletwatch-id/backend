@@ -96,8 +96,7 @@ class TransactionController extends Controller
      */
     public function update(UpdateTransactionRequest $request, Transaction $transaction): JsonResponse
     {
-        $transaction->fill($request->validated());
-        $transaction->save();
+        $transaction->update($request->validated());
 
         dispatch(new GetTotalTransactionAndTotalInstallment($transaction));
 

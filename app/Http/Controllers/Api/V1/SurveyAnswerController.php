@@ -10,7 +10,6 @@ use App\Jobs\GetPersonality;
 use App\Models\SurveyAnswer;
 use App\Models\SurveyResult;
 use App\Utils\ResponseFormatter;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedInclude;
@@ -59,16 +58,11 @@ class SurveyAnswerController extends Controller
             $surveyAnswers = [];
 
             foreach ($data as $datum) {
-                $surveyAnswer = new SurveyAnswer($datum);
-                $surveyAnswer->fill([
-                    'result_id' => $surveyResult->id,
-                ]);
-                $surveyAnswers[] = $surveyAnswer;
+                $datum['result_id'] = $surveyResult->id;
+                $surveyAnswers[] = $datum;
             }
 
-            $surveyAnswers = Collection::make($surveyAnswers);
-
-            SurveyAnswer::bulkInsert($surveyAnswers);
+            $surveyAnswers = SurveyAnswer::createMany($surveyAnswers);
 
             if ($surveyType === 'PERSONALITY') {
                 dispatch(new GetPersonality($surveyResult));
@@ -78,12 +72,9 @@ class SurveyAnswerController extends Controller
 
             return ResponseFormatter::collection('survey_answers', $surveyAnswers, 201);
         } else {
-            $surveyAnswer = new SurveyAnswer($data);
-            $surveyAnswer->fill([
-                'result_id' => $surveyResult->id,
-            ]);
+            $data['result_id'] = $surveyResult->id;
 
-            $surveyAnswer->save();
+            $surveyAnswer = SurveyAnswer::create($data);
 
             if ($surveyType === 'PERSONALITY') {
                 dispatch(new GetPersonality($surveyResult));
@@ -115,8 +106,7 @@ class SurveyAnswerController extends Controller
      */
     public function update(UpdateSurveyAnswerRequest $request, SurveyAnswer $surveyAnswer): JsonResponse
     {
-        $surveyAnswer->fill($request->validated());
-        $surveyAnswer->save();
+        $surveyAnswer->update($request->validated());
 
         $surveyResult = $surveyAnswer->surveyResult;
         $surveyType = $surveyResult->survey->type;

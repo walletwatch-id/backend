@@ -74,8 +74,7 @@ class SurveyQuestionController extends Controller
      */
     public function update(UpdateSurveyQuestionRequest $request, SurveyQuestion $surveyQuestion): JsonResponse
     {
-        $surveyQuestion->fill($request->validated());
-        $surveyQuestion->save();
+        $surveyQuestion->update($request->validated());
 
         return ResponseFormatter::singleton('survey_question', $surveyQuestion);
     }

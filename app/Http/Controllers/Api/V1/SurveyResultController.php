@@ -67,18 +67,14 @@ class SurveyResultController extends Controller
      */
     public function store(StoreSurveyResultRequest $request, Survey $survey): JsonResponse
     {
-        $surveyResult = new SurveyResult($request->validated());
-        $surveyResult->fill([
-            'survey_id' => $survey->id,
-        ]);
+        $data = $request->validated();
+        $data['survey_id'] = $survey->id;
 
         if ($request->user()->role !== 'ADMIN') {
-            $surveyResult->fill([
-                'user_id' => $request->user()->id,
-            ]);
+            $data['user_id'] = $request->user()->id;
         }
 
-        $surveyResult->save();
+        $surveyResult = SurveyResult::create($data);
 
         return ResponseFormatter::singleton('survey_result', $surveyResult, 201);
     }
@@ -104,8 +100,7 @@ class SurveyResultController extends Controller
      */
     public function update(UpdateSurveyResultRequest $request, SurveyResult $surveyResult): JsonResponse
     {
-        $surveyResult->fill($request->validated());
-        $surveyResult->save();
+        $surveyResult->update($request->validated());
 
         return ResponseFormatter::singleton('survey_result', $surveyResult);
     }

@@ -10,34 +10,51 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use LogicException;
 
-trait HasBulkInsert
+trait HasBulkCreate
 {
     /**
-     * @param  Collection|Model[]  $models
+     * Create many models
      */
-    public static function bulkInsert(Collection $models): bool
+    public static function createMany(array $attributes): Collection
     {
         if (! is_subclass_of(static::class, Model::class)) {
             throw new LogicException(
-                'Class using HasBulkInsert trait should be a subclass of '.Model::class
+                'Class using HasBulkCreate trait should be a subclass of '.Model::class
+            );
+        }
+
+        $models = collect($attributes)
+            ->map(function (array $attribute) {
+                return (new static)->newModelInstance($attribute);
+            });
+
+        (new static)->saveMany($models);
+
+        return $models;
+    }
+
+    /**
+     * Save many models
+     */
+    private function saveMany(Collection $models): bool
+    {
+        if (! is_subclass_of(static::class, Model::class)) {
+            throw new LogicException(
+                'Class using HasBulkCreate trait should be a subclass of '.Model::class
             );
         }
 
         // Check the argument
         foreach ($models as $model) {
             if (! $model instanceof static) {
-                throw new LogicException(static::class.'::bulkInsert() cannot be used for '.\get_class($model));
+                throw new LogicException(static::class.'::saveMany() cannot be used for '.\get_class($model));
             }
 
             if ($model->exists) {
                 throw new LogicException(
-                    'This Eloquent model has already been persisted: class = '.static::class.', primary key ='.$model->getKey()
+                    'This instance has already been persisted (class '.static::class.', primary key '.$model->getKey().')'
                 );
             }
-        }
-
-        if ($models->isEmpty()) {
-            return true;
         }
 
         // Before save
@@ -45,6 +62,10 @@ trait HasBulkInsert
             if ($model->fireModelEvent('saving') === false) {
                 return false;
             }
+        }
+
+        if ($models->isEmpty()) {
+            return true;
         }
 
         // Before insert
@@ -63,11 +84,11 @@ trait HasBulkInsert
         }
 
         // Perform insert
-        $attributesArray = static::convertModelsToArray($models);
-        $saved = (new static)->newQueryWithoutScopes()->insert($attributesArray);
-        if (! $saved) {
-            return false;
-        }
+        $query = (new static)->newModelQuery();
+
+        $attributes = (new static)->getAttributesForInsertMany($models);
+
+        $query->insert($attributes);
 
         // After insert
         foreach ($models as $model) {
@@ -77,9 +98,8 @@ trait HasBulkInsert
         }
 
         // After save
-        $options = [];
         foreach ($models as $model) {
-            $model->finishSave($options);
+            $model->finishSave([]);
         }
 
         return true;
@@ -87,10 +107,8 @@ trait HasBulkInsert
 
     /**
      * Create array of model attributes
-     *
-     * @param  Collection|Model[]  $models
      */
-    private static function convertModelsToArray(Collection $models): array
+    private function getAttributesForInsertMany(Collection $models): array
     {
         $attributesCollection = $models
             ->map(function (Model $model) {

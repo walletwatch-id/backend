@@ -83,8 +83,7 @@ class ChatMessageController extends Controller
      */
     public function update(UpdateChatMessageRequest $request, ChatMessage $chatMessage): JsonResponse
     {
-        $chatMessage->fill($request->validated());
-        $chatMessage->save();
+        $chatMessage->update($request->validated());
 
         event(new ChatMessageUpdated($chatMessage));
 

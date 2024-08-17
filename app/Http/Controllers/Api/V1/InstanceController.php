@@ -91,12 +91,11 @@ class InstanceController extends Controller
             $manifest = $this->storageFacade->store($request->file('logo'), 'logo/instances');
         }
 
-        $instance->fill(
+        $instance->update(
             $hasLogo
             ? array_replace($request->validated(), ['logo' => $manifest])
             : $request->validated()
         );
-        $instance->save();
 
         return ResponseFormatter::singleton('instance', $instance);
     }

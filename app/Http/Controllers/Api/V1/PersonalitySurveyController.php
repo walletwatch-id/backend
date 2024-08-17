@@ -86,8 +86,7 @@ class PersonalitySurveyController extends Controller
      */
     public function update(UpdateSurveyRequest $request, Survey $survey): JsonResponse
     {
-        $survey->fill($request->validated());
-        $survey->save();
+        $survey->update($request->validated());
 
         return ResponseFormatter::singleton('personality_survey', $survey);
     }

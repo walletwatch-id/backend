@@ -32,8 +32,7 @@ class HotlineController extends Controller
      */
     public function update(UpdateHotlineRequest $request, Hotline $hotline): JsonResponse
     {
-        $hotline->fill($request->validated());
-        $hotline->save();
+        $hotline->update($request->validated());
 
         return ResponseFormatter::singleton('hotline', $hotline);
     }

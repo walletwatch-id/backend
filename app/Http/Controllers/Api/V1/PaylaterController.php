@@ -91,12 +91,11 @@ class PaylaterController extends Controller
             $manifest = $this->storageFacade->store($request->file('logo'), 'logo/paylaters');
         }
 
-        $paylater->fill(
+        $paylater->update(
             $request->has('logo')
             ? array_replace($request->validated(), ['logo' => $manifest])
             : $request->validated()
         );
-        $paylater->save();
 
         return ResponseFormatter::singleton('paylater', $paylater);
     }
