@@ -52,8 +52,8 @@ class GetPersonality implements ShouldBeUniqueUntilProcessing, ShouldQueue
 
         if (count($surveyAnswers) === $surveyQuestionsCount) {
             $features = [];
-            for ($i = 1; $i <= 36; $i++) {
-                $features['f'.str_pad($i, 2, '0', STR_PAD_LEFT)] = (int) $surveyAnswers[$i]['answer'];
+            for ($i = 0; $i < 36; $i++) {
+                $features['f'.str_pad($i + 1, 2, '0', STR_PAD_LEFT)] = (int) $surveyAnswers[$i]['answer'];
             }
 
             $personality = $machineLearningFacade->getPersonality($features);

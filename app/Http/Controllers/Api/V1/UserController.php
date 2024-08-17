@@ -8,7 +8,6 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Jobs\DeleteBlob;
 use App\Models\User;
 use App\Repositories\StorageFacade;
-use App\Utils\Encoder;
 use App\Utils\ResponseFormatter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
