@@ -11,7 +11,7 @@
         "php": "^8.2",
         "laravel/framework": "11.18.1",
         "laravel/octane": "2.5.2",
-        "laravel/passport": "12.2.1",
+        "laravel/passport": "13.7.1",
         "laravel/reverb": "@beta",
         "laravel/tinker": "2.9.0",
         "openai-php/laravel": "0.10.1",
